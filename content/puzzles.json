@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "puzzles": [
+    {
+      "id": "tigers-and-sheep",
+      "title": "Tigers & Sheep",
+      "tagline": "100 hungry, flawless logicians and one very nervous sheep.",
+      "category": "gameTheory",
+      "difficulty": 3,
+      "prompt": "On an island live 100 tigers and 1 sheep. Any tiger may eat the sheep — but the moment a tiger eats it, that tiger turns into a sheep, and can then be eaten by another tiger.\n\nEvery tiger is perfectly logical and, above all else, wants to stay alive. No tiger will make a move that gets itself eaten.\n\nWith 100 tigers, does the sheep get eaten, or is it safe?",
+      "rules": [
+        "Any tiger may eat the sheep — but eating it turns the eater into a sheep.",
+        "A newly-made sheep can then be eaten by any remaining tiger.",
+        "Every tiger is perfectly logical and reasons flawlessly.",
+        "Above all, each tiger wants to survive; it never makes a move that leaves it exposed to being eaten."
+      ],
+      "sandbox": {
+        "type": "tigers",
+        "minTigers": 1,
+        "maxTigers": 12,
+        "questionTigers": 100
+      },
+      "answer": {
+        "type": "binary",
+        "question": "With 100 tigers, is the sheep…",
+        "optionA": "Safe",
+        "optionB": "Eaten",
+        "correctIsA": true
+      },
+      "hints": [
+        "What happens with just 1 tiger? Then try 2. What changed?",
+        "When a tiger decides whether to eat, what does it need to be true about the world it wakes up in afterwards?",
+        "After a tiger eats, how many tigers are left facing the new sheep?",
+        "Line up the cases from small to large. What splits the safe outcomes from the eaten ones?"
+      ],
+      "whyExplanation": "Think about it from the smallest case up.\n\nWith 1 tiger, there is nothing to fear: that tiger eats the sheep and stays safe, because no other tiger is left to eat it. So 1 tiger → the sheep is eaten.\n\nWith 2 tigers, each tiger thinks: \"If I eat the sheep, I become a sheep — and then the other tiger is exactly in the 1-tiger situation, where eating is safe. It would eat me.\" So neither dares. 2 tigers → the sheep is safe.\n\nWith 3 tigers, a tiger reasons: \"If I eat, I become the sheep in a 2-tiger world — and we just saw the sheep is safe there. So I would survive.\" One of them eats. 3 tigers → eaten.\n\nThe pattern chains all the way up: a tiger eats only if, after it becomes the sheep, the remaining tigers form a \"sheep is safe\" situation. That flips with every added tiger. So the sheep is eaten when the number of tigers is ODD, and safe when it is EVEN.\n\n100 is even — so the sheep is safe. All 100 tigers, each perfectly logical, hold back, because each knows that eating would only hand itself to the next tiger in line.",
+      "comingSoon": false
+    },
+    {
+      "id": "make-the-target",
+      "title": "Make the Target",
+      "tagline": "Pick the right tiles to land exactly on the number.",
+      "category": "math",
+      "difficulty": 1,
+      "prompt": "You have a handful of number tiles. Add some of them together so the total lands exactly on the target. Each tile can be used at most once.",
+      "rules": [
+        "Tap a tile to move it in or out of the tray.",
+        "The running total updates as you go — reach the target exactly."
+      ],
+      "sandbox": {
+        "type": "numberTiles",
+        "tiles": [
+          2,
+          3,
+          5,
+          7,
+          9
+        ],
+        "target": 17
+      },
+      "answer": {
+        "type": "reachTarget",
+        "target": 17
+      },
+      "hints": [
+        "Which single tile gets you closest to 17 without going over?",
+        "If you start from the largest tile, how much is left to make up?"
+      ],
+      "whyExplanation": "Reaching an exact total is a small taste of the \"subset sum\" problem: from a set of numbers, find a group that adds to a goal. Here, 3 + 5 + 9 = 17. With only a few tiles you can reason it out by hand; with hundreds, it becomes one of computer science's famously hard problems.",
+      "comingSoon": false
+    },
+    {
+      "id": "will-it-balance",
+      "title": "Will It Balance?",
+      "tagline": "Slide the weight to find the balance point.",
+      "category": "physics",
+      "difficulty": 2,
+      "prompt": "A weight sits on the left of a balance beam. Slide the weight on the right until the beam settles level.",
+      "rules": [
+        "Drag the right-hand weight along the beam to change its distance.",
+        "The beam tips according to real weight and distance — feel your way to level."
+      ],
+      "sandbox": {
+        "type": "lever",
+        "leftWeight": 4.0,
+        "leftDistance": 3.0,
+        "rightWeight": 3.0,
+        "maxDistance": 5.0
+      },
+      "answer": {
+        "type": "goal",
+        "goalLabel": "Balance the beam"
+      },
+      "hints": [
+        "What makes one side dip — is it the weight, the distance, or both together?",
+        "The left side is heavier but closer in. How could a lighter weight match it?"
+      ],
+      "whyExplanation": "A beam balances when the turning effect (torque) is equal on both sides, and torque = weight x distance from the pivot. The left gives 4 x 3 = 12, so the lighter right weight of 3 must sit at distance 4 (3 x 4 = 12). A smaller weight can balance a larger one simply by sitting farther out.",
+      "comingSoon": false
+    }
+  ]
+}
