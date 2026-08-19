@@ -11,7 +11,7 @@ import 'package:mindshift/data/models/puzzle_serialization.dart';
 import 'package:mindshift/data/puzzles/puzzle_registry.dart';
 
 void main() {
-  final pack = PuzzlePack(version: 1, puzzles: puzzleRegistry);
+  final pack = PuzzlePack(version: 2, puzzles: puzzleRegistry);
   const encoder = JsonEncoder.withIndent('  ');
   // ignore: avoid_print
   print(encoder.convert(pack.toJson()));

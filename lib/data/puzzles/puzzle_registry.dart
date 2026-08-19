@@ -17,4 +17,5 @@ final List<Puzzle> puzzleRegistry = <Puzzle>[
   tigersNinetyNine, // 6 · game theory · d4
   makeTheTargetThree, // 7 · math · d5
   lastStonePuzzle, // 8 · game theory (Nim) · d5
+  lastStoneReversedPuzzle, // 9 · game theory (Nim misère) · d4
 ];

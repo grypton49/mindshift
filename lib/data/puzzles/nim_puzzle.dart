@@ -43,3 +43,44 @@ final Puzzle lastStonePuzzle = Puzzle(
       'round back to the next multiple of 4. From 13 you take 1 to leave 12, and '
       'you win every time. So yes, the first player can always force a win here.',
 );
+
+/// A misère twist: taking the last stone now LOSES. Reuses the same Nim mechanic,
+/// so it can ship purely as content — the strategy shifts subtly.
+final Puzzle lastStoneReversedPuzzle = Puzzle(
+  id: 'last-stone-reversed',
+  title: 'The Last Stone: Reversed',
+  tagline: 'Same game, flipped rule — now taking the last stone LOSES.',
+  category: PuzzleCategory.gameTheory,
+  difficulty: 4,
+  prompt:
+      'There are 10 stones. You and your opponent take turns removing 1, 2, or 3 '
+      'stones. You go first. This time, whoever takes the very last stone LOSES.\n\n'
+      'Playing perfectly against a perfect opponent, can the first player always '
+      'force a win?',
+  rules: const [
+    'On your turn, remove 1, 2, or 3 stones.',
+    'You move first; the opponent then plays perfectly.',
+    'Whoever is forced to take the last stone loses.',
+  ],
+  sandbox: const NimSandboxSpec(stones: 10, maxTake: 3, lastTakeWins: false),
+  answer: BinaryAnswerSpec(
+    question: 'Going first, can you always force a win?',
+    optionA: 'Yes',
+    optionB: 'No',
+    correctIsA: nimFirstPlayerWins(
+      stones: 10,
+      maxTake: 3,
+      lastTakeWins: false,
+    ),
+  ),
+  hints: const [
+    'What is the WORST pile size to be handed now — the one you are desperate to avoid?',
+    'You wanted multiples of 4 before. Where does that safe target shift when the last stone is poison?',
+  ],
+  whyExplanation:
+      'Now the poison is the last stone, so you want to hand your opponent '
+      'exactly 1 (they must take it and lose). Working back, the safe numbers to '
+      'leave are 1, 5, 9, 13, … — one more than a multiple of 4. From 10 you take '
+      '1 to leave 9, then keep returning to 5 and then 1. So yes, the first '
+      'player can still force a win — the target just shifts by one.',
+);
