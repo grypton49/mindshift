@@ -8,71 +8,112 @@ import 'package:mindshift/core/theme/app_colors.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/core/widgets/calm_scaffold.dart';
 import 'package:mindshift/core/widgets/soft_card.dart';
-import 'package:mindshift/data/models/puzzle.dart';
 import 'package:mindshift/data/models/puzzle_category.dart';
-import 'package:mindshift/data/models/puzzle_progress.dart';
+import 'package:mindshift/data/progression.dart';
 import 'package:mindshift/data/providers.dart';
 
-/// The home "shelf": a warm greeting, a deterministic daily puzzle hero, and a
-/// calm grid of all puzzles. Coming-soon puzzles read as gently locked.
+/// The home "journey": a warm greeting, a gentle sense of place ("Level X of N"),
+/// and the level path — a connected, top-to-bottom sequence of level cards the
+/// player climbs one rung at a time. Locked levels read as calm, not gated;
+/// the current step is softly emphasized so there is always one clear next move.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzles = ref.watch(puzzleRegistryProvider);
-    final progress = ref.watch(progressProvider);
+    final levels = ref.watch(levelsProvider);
+    final currentLevel = ref.watch(currentLevelProvider);
+    final streak = ref.watch(progressProvider).streak;
+    final avatar = ref.watch(profileProvider).avatar;
 
-    // Prefer a playable puzzle for the hero; skip coming-soon when possible.
-    final playable = puzzles.where((p) => !p.comingSoon).toList();
-    final Puzzle? hero = playable.isEmpty
-        ? null
-        : playable[dayOfEpoch(DateTime.now()) % playable.length];
+    final children = <Widget>[
+      const SizedBox(height: AppSpacing.sm),
+      _Greeting(
+        streak: streak,
+        currentLevel: currentLevel,
+        totalLevels: levels.length,
+      ),
+      const SizedBox(height: AppSpacing.xl),
+    ];
+
+    if (levels.isEmpty) {
+      children.add(const _EmptyState());
+    } else {
+      for (var i = 0; i < levels.length; i++) {
+        if (i > 0) {
+          children.add(_PathConnector(completed: levels[i - 1].solved));
+        }
+        children.add(
+          _LevelCard(
+            level: levels[i],
+            isCurrent: levels[i].levelNumber == currentLevel,
+          ),
+        );
+      }
+    }
 
     return CalmScaffold(
       actions: [
-        IconButton(
-          tooltip: 'Your progress',
-          icon: const Icon(Icons.insights_rounded),
-          color: AppColors.textPrimary,
-          onPressed: () => context.push(Routes.stats),
+        _AvatarButton(
+          avatar: avatar,
+          onTap: () => context.push(Routes.profile),
         ),
       ],
       body: ListView(
         padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
-        children: [
-          const SizedBox(height: AppSpacing.sm),
-          _Greeting(streak: progress.streak),
-          const SizedBox(height: AppSpacing.xl),
-          if (puzzles.isEmpty)
-            const _EmptyState()
-          else ...[
-            if (hero != null) ...[
-              const _SectionLabel('Daily puzzle'),
-              const SizedBox(height: AppSpacing.md),
-              _HeroCard(
-                puzzle: hero,
-                solved: progress.isSolved(hero.id),
-                onTap: () => context.push(Routes.puzzlePath(hero.id)),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-            ],
-            const _SectionLabel('All puzzles'),
-            const SizedBox(height: AppSpacing.md),
-            _PuzzleGrid(puzzles: puzzles, progress: progress),
-          ],
-        ],
+        children: children,
       ),
     );
   }
 }
 
-/// Warm minimal header: the app name, a gentle subtitle, and — only when the
-/// streak is alive — a soft streak pill.
+/// A circular, tappable avatar in the app bar showing the player's chosen emoji.
+class _AvatarButton extends StatelessWidget {
+  const _AvatarButton({required this.avatar, required this.onTap});
+
+  final String avatar;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: AppSpacing.sm),
+      child: Tooltip(
+        message: 'Your profile',
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: AppColors.accentSoft,
+                shape: BoxShape.circle,
+              ),
+              child: Text(avatar, style: const TextStyle(fontSize: 20)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Warm minimal header: the app name, a gentle subtitle, and — when they apply —
+/// a soft streak pill and a calm "Level X of N" indicator.
 class _Greeting extends StatelessWidget {
-  const _Greeting({required this.streak});
+  const _Greeting({
+    required this.streak,
+    required this.currentLevel,
+    required this.totalLevels,
+  });
 
   final int streak;
+  final int currentLevel;
+  final int totalLevels;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +131,7 @@ class _Greeting extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
-          'A little thinking, well spent.',
+          'Your thinking journey, one level at a time.',
           style: GoogleFonts.nunito(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -98,15 +139,24 @@ class _Greeting extends StatelessWidget {
             height: 1.4,
           ),
         ),
-        if (streak > 0) ...[
+        if (streak > 0 || totalLevels > 0) ...[
           const SizedBox(height: AppSpacing.md),
-          _StreakPill(streak: streak),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              if (streak > 0) _StreakPill(streak: streak),
+              if (totalLevels > 0)
+                _LevelIndicator(current: currentLevel, total: totalLevels),
+            ],
+          ),
         ],
       ],
     );
   }
 }
 
+/// A soft, non-competitive streak pill. Only shown when the streak is alive.
 class _StreakPill extends StatelessWidget {
   const _StreakPill({required this.streak});
 
@@ -135,97 +185,36 @@ class _StreakPill extends StatelessWidget {
   }
 }
 
-/// A quiet section heading above the hero and the grid.
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.text);
+/// A quiet "you are here" marker for the path: Level X of N.
+class _LevelIndicator extends StatelessWidget {
+  const _LevelIndicator({required this.current, required this.total});
 
-  final String text;
+  final int current;
+  final int total;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: GoogleFonts.nunito(
-        fontSize: 13,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textSecondary,
-        letterSpacing: 0.8,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
       ),
-    );
-  }
-}
-
-/// The larger "daily puzzle" card. Always playable (heroes skip coming-soon).
-class _HeroCard extends StatelessWidget {
-  const _HeroCard({
-    required this.puzzle,
-    required this.solved,
-    required this.onTap,
-  });
-
-  final Puzzle puzzle;
-  final bool solved;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SoftCard(
-      onTap: onTap,
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted,
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              _CategoryChip(category: puzzle.category),
-              const Spacer(),
-              if (solved) const _SolvedBadge(),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.md),
+          const Icon(Icons.route_rounded, size: 16, color: AppColors.accent),
+          const SizedBox(width: AppSpacing.xs + 2),
           Text(
-            puzzle.title,
+            'Level $current of $total',
             style: GoogleFonts.nunito(
-              fontSize: 26,
-              fontWeight: FontWeight.w800,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
-              height: 1.15,
             ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            puzzle.tagline,
-            style: GoogleFonts.nunito(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
-              height: 1.45,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Row(
-            children: [
-              _DifficultyDots(difficulty: puzzle.difficulty),
-              const Spacer(),
-              Row(
-                children: [
-                  Text(
-                    solved ? 'Revisit' : 'Play',
-                    style: GoogleFonts.nunito(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.accent,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.xs),
-                  const Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 18,
-                    color: AppColors.accent,
-                  ),
-                ],
-              ),
-            ],
           ),
         ],
       ),
@@ -233,81 +222,123 @@ class _HeroCard extends StatelessWidget {
   }
 }
 
-/// Responsive grid: one column on narrow phones, two on wider screens.
-class _PuzzleGrid extends StatelessWidget {
-  const _PuzzleGrid({required this.puzzles, required this.progress});
+/// How a single rung renders. Precedence: locked > solved > current > open.
+enum _LevelState { locked, current, solved, open }
 
-  final List<Puzzle> puzzles;
-  final PuzzleProgress progress;
+/// A gentle vertical connector (three soft dots) drawn between level cards to
+/// convey a continuous path. It reads as "walked" once the rung above is solved.
+class _PathConnector extends StatelessWidget {
+  const _PathConnector({required this.completed});
+
+  final bool completed;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final columns = constraints.maxWidth >= 560 ? 2 : 1;
-        const gap = AppSpacing.md;
-        final itemWidth = columns == 1
-            ? constraints.maxWidth
-            : (constraints.maxWidth - gap) / 2;
-
-        return Wrap(
-          spacing: gap,
-          runSpacing: gap,
-          children: [
-            for (final p in puzzles)
-              SizedBox(
-                width: itemWidth,
-                child: _PuzzleCard(puzzle: p, solved: progress.isSolved(p.id)),
-              ),
+    final color = completed
+        ? AppColors.accent.withValues(alpha: 0.5)
+        : AppColors.textSecondary.withValues(alpha: 0.25);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      child: Column(
+        children: [
+          for (var i = 0; i < 3; i++) ...[
+            if (i > 0) const SizedBox(height: 4),
+            Container(
+              width: 4,
+              height: 4,
+              decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+            ),
           ],
-        );
-      },
+        ],
+      ),
     );
   }
 }
 
-/// A single puzzle tile. Coming-soon puzzles render greyed and are not tappable.
-class _PuzzleCard extends StatelessWidget {
-  const _PuzzleCard({required this.puzzle, required this.solved});
+/// One rung of the journey. Locked rungs are gently greyed and untappable;
+/// the current rung wears a soft accent ring; solved rungs carry a check and
+/// stay open for a revisit.
+class _LevelCard extends StatelessWidget {
+  const _LevelCard({required this.level, required this.isCurrent});
 
-  final Puzzle puzzle;
-  final bool solved;
+  final PuzzleLevel level;
+  final bool isCurrent;
 
   @override
   Widget build(BuildContext context) {
-    final locked = puzzle.comingSoon;
+    final puzzle = level.puzzle;
+    final state = !level.unlocked
+        ? _LevelState.locked
+        : level.solved
+        ? _LevelState.solved
+        : isCurrent
+        ? _LevelState.current
+        : _LevelState.open;
+    final locked = state == _LevelState.locked;
 
-    final card = SoftCard(
+    // Trailing action hint, tuned to the rung's state.
+    String? actionLabel;
+    var filledAction = false;
+    switch (state) {
+      case _LevelState.locked:
+        actionLabel = null;
+      case _LevelState.current:
+        actionLabel = level.index == 0 ? 'Start' : 'Continue';
+        filledAction = true;
+      case _LevelState.solved:
+        actionLabel = 'Revisit';
+      case _LevelState.open:
+        actionLabel = 'Play';
+    }
+
+    Widget card = SoftCard(
       color: locked ? AppColors.surfaceMuted : AppColors.surface,
       onTap: locked ? null : () => context.push(Routes.puzzlePath(puzzle.id)),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              _CategoryChip(category: puzzle.category, muted: locked),
-              const Spacer(),
-              if (locked)
-                const Icon(
-                  Icons.lock_outline_rounded,
-                  size: 18,
-                  color: AppColors.textSecondary,
-                )
-              else if (solved)
-                const _SolvedBadge(),
+              _NodeMarker(state: state, levelNumber: level.levelNumber),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Level ${level.levelNumber}',
+                      style: GoogleFonts.nunito(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.6,
+                        color: locked
+                            ? AppColors.textSecondary
+                            : AppColors.accent,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      puzzle.title,
+                      style: GoogleFonts.nunito(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w800,
+                        height: 1.15,
+                        color: locked
+                            ? AppColors.textSecondary
+                            : AppColors.textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (actionLabel != null) ...[
+                const SizedBox(width: AppSpacing.sm),
+                _ActionChip(label: actionLabel, filled: filledAction),
+              ],
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          Text(
-            puzzle.title,
-            style: GoogleFonts.nunito(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: locked ? AppColors.textSecondary : AppColors.textPrimary,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
           Text(
             puzzle.tagline,
             maxLines: 2,
@@ -315,31 +346,179 @@ class _PuzzleCard extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
               height: 1.4,
+              color: AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
           Row(
             children: [
-              _DifficultyDots(difficulty: puzzle.difficulty, muted: locked),
+              _CategoryChip(category: puzzle.category, muted: locked),
               const Spacer(),
-              if (locked)
-                Text(
-                  'Coming soon',
-                  style: GoogleFonts.nunito(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
+              _DifficultyDots(difficulty: puzzle.difficulty, muted: locked),
             ],
           ),
+          if (locked) ...[
+            const SizedBox(height: AppSpacing.md),
+            Row(
+              children: [
+                const Icon(
+                  Icons.lock_outline_rounded,
+                  size: 15,
+                  color: AppColors.textSecondary,
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Expanded(
+                  child: Text(
+                    'Solve the level before to unlock.',
+                    style: GoogleFonts.nunito(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );
 
-    return locked ? Opacity(opacity: 0.75, child: card) : card;
+    // The current rung wears a soft accent ring so the next step is obvious.
+    if (state == _LevelState.current) {
+      card = Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
+          border: Border.all(color: AppColors.accent, width: 2),
+        ),
+        child: card,
+      );
+    }
+
+    return locked ? Opacity(opacity: 0.85, child: card) : card;
+  }
+}
+
+/// The circular node on the path: a check when solved, the level number when
+/// playable, and a lock when gated.
+class _NodeMarker extends StatelessWidget {
+  const _NodeMarker({required this.state, required this.levelNumber});
+
+  final _LevelState state;
+  final int levelNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 40.0;
+
+    switch (state) {
+      case _LevelState.solved:
+        return Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: AppColors.accent,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(Icons.check_rounded, size: 20, color: Colors.white),
+        );
+      case _LevelState.current:
+        return Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: AppColors.accentSoft,
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.accent, width: 2),
+          ),
+          child: Text(
+            '$levelNumber',
+            style: GoogleFonts.nunito(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: AppColors.accent,
+            ),
+          ),
+        );
+      case _LevelState.locked:
+        return Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: AppColors.surface,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.lock_outline_rounded,
+            size: 18,
+            color: AppColors.textSecondary,
+          ),
+        );
+      case _LevelState.open:
+        return Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: AppColors.surfaceMuted,
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            '$levelNumber',
+            style: GoogleFonts.nunito(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        );
+    }
+  }
+}
+
+/// A small trailing chip: a filled accent call-to-action on the current rung,
+/// a soft accent chip elsewhere.
+class _ActionChip extends StatelessWidget {
+  const _ActionChip({required this.label, required this.filled});
+
+  final String label;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: filled ? AppColors.accent : AppColors.accentSoft,
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.nunito(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: filled ? Colors.white : AppColors.accent,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Icon(
+            Icons.arrow_forward_rounded,
+            size: 15,
+            color: filled ? Colors.white : AppColors.accent,
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -405,28 +584,7 @@ class _DifficultyDots extends StatelessWidget {
   }
 }
 
-/// A gentle "solved" check, never competitive.
-class _SolvedBadge extends StatelessWidget {
-  const _SolvedBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.xs),
-      decoration: const BoxDecoration(
-        color: AppColors.accentSoft,
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(
-        Icons.check_rounded,
-        size: 16,
-        color: AppColors.positive,
-      ),
-    );
-  }
-}
-
-/// Calm placeholder shown when no puzzles are registered yet.
+/// Calm placeholder shown when the ladder has no levels yet.
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
 

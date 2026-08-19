@@ -12,6 +12,7 @@ import 'package:mindshift/data/models/puzzle_category.dart';
 import 'package:mindshift/data/providers.dart';
 import 'package:mindshift/features/puzzle/mechanics/answer_bar.dart';
 import 'package:mindshift/features/puzzle/mechanics/lever_sandbox.dart';
+import 'package:mindshift/features/puzzle/mechanics/nim_sandbox.dart';
 import 'package:mindshift/features/puzzle/mechanics/number_tiles_sandbox.dart';
 import 'package:mindshift/features/puzzle/mechanics/prediction_toggle.dart';
 import 'package:mindshift/features/puzzle/mechanics/tigers_sandbox.dart';
@@ -175,6 +176,7 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
       spec: spec,
       onAnswerChanged: (balanced) => setState(() => _reportedBool = balanced),
     ),
+    NimSandboxSpec() => NimSandbox(spec: spec),
   };
 
   /// Opt-in, one-at-a-time hints. Never auto-shown; the reveal button hides once

@@ -34,6 +34,12 @@ Map<String, dynamic> sandboxSpecToJson(SandboxSpec spec) {
         'rightWeight': s.rightWeight,
         'maxDistance': s.maxDistance,
       },
+    NimSandboxSpec s => {
+        'type': 'nim',
+        'stones': s.stones,
+        'maxTake': s.maxTake,
+        'lastTakeWins': s.lastTakeWins,
+      },
   };
 }
 
@@ -57,6 +63,12 @@ SandboxSpec? sandboxSpecFromJson(Map<String, dynamic> json) {
         leftDistance: _double(json['leftDistance'], 1),
         rightWeight: _double(json['rightWeight'], 1),
         maxDistance: _double(json['maxDistance'], 5),
+      );
+    case 'nim':
+      return NimSandboxSpec(
+        stones: _int(json['stones'], 12),
+        maxTake: _int(json['maxTake'], 3),
+        lastTakeWins: json['lastTakeWins'] != false,
       );
     default:
       return null;

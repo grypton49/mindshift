@@ -2,41 +2,6 @@
   "version": 1,
   "puzzles": [
     {
-      "id": "tigers-and-sheep",
-      "title": "Tigers & Sheep",
-      "tagline": "100 hungry, flawless logicians and one very nervous sheep.",
-      "category": "gameTheory",
-      "difficulty": 3,
-      "prompt": "On an island live 100 tigers and 1 sheep. Any tiger may eat the sheep — but the moment a tiger eats it, that tiger turns into a sheep, and can then be eaten by another tiger.\n\nEvery tiger is perfectly logical and, above all else, wants to stay alive. No tiger will make a move that gets itself eaten.\n\nWith 100 tigers, does the sheep get eaten, or is it safe?",
-      "rules": [
-        "Any tiger may eat the sheep — but eating it turns the eater into a sheep.",
-        "A newly-made sheep can then be eaten by any remaining tiger.",
-        "Every tiger is perfectly logical and reasons flawlessly.",
-        "Above all, each tiger wants to survive; it never makes a move that leaves it exposed to being eaten."
-      ],
-      "sandbox": {
-        "type": "tigers",
-        "minTigers": 1,
-        "maxTigers": 12,
-        "questionTigers": 100
-      },
-      "answer": {
-        "type": "binary",
-        "question": "With 100 tigers, is the sheep…",
-        "optionA": "Safe",
-        "optionB": "Eaten",
-        "correctIsA": true
-      },
-      "hints": [
-        "What happens with just 1 tiger? Then try 2. What changed?",
-        "When a tiger decides whether to eat, what does it need to be true about the world it wakes up in afterwards?",
-        "After a tiger eats, how many tigers are left facing the new sheep?",
-        "Line up the cases from small to large. What splits the safe outcomes from the eaten ones?"
-      ],
-      "whyExplanation": "Think about it from the smallest case up.\n\nWith 1 tiger, there is nothing to fear: that tiger eats the sheep and stays safe, because no other tiger is left to eat it. So 1 tiger → the sheep is eaten.\n\nWith 2 tigers, each tiger thinks: \"If I eat the sheep, I become a sheep — and then the other tiger is exactly in the 1-tiger situation, where eating is safe. It would eat me.\" So neither dares. 2 tigers → the sheep is safe.\n\nWith 3 tigers, a tiger reasons: \"If I eat, I become the sheep in a 2-tiger world — and we just saw the sheep is safe there. So I would survive.\" One of them eats. 3 tigers → eaten.\n\nThe pattern chains all the way up: a tiger eats only if, after it becomes the sheep, the remaining tigers form a \"sheep is safe\" situation. That flips with every added tiger. So the sheep is eaten when the number of tigers is ODD, and safe when it is EVEN.\n\n100 is even — so the sheep is safe. All 100 tigers, each perfectly logical, hold back, because each knows that eating would only hand itself to the next tiger in line.",
-      "comingSoon": false
-    },
-    {
       "id": "make-the-target",
       "title": "Make the Target",
       "tagline": "Pick the right tiles to land exactly on the number.",
@@ -96,6 +61,201 @@
         "The left side is heavier but closer in. How could a lighter weight match it?"
       ],
       "whyExplanation": "A beam balances when the turning effect (torque) is equal on both sides, and torque = weight x distance from the pivot. The left gives 4 x 3 = 12, so the lighter right weight of 3 must sit at distance 4 (3 x 4 = 12). A smaller weight can balance a larger one simply by sitting farther out.",
+      "comingSoon": false
+    },
+    {
+      "id": "tigers-and-sheep",
+      "title": "Tigers & Sheep",
+      "tagline": "100 hungry, flawless logicians and one very nervous sheep.",
+      "category": "gameTheory",
+      "difficulty": 3,
+      "prompt": "On an island live 100 tigers and 1 sheep. Any tiger may eat the sheep — but the moment a tiger eats it, that tiger turns into a sheep, and can then be eaten by another tiger.\n\nEvery tiger is perfectly logical and, above all else, wants to stay alive. No tiger will make a move that gets itself eaten.\n\nWith 100 tigers, does the sheep get eaten, or is it safe?",
+      "rules": [
+        "Any tiger may eat the sheep — but eating it turns the eater into a sheep.",
+        "A newly-made sheep can then be eaten by any remaining tiger.",
+        "Every tiger is perfectly logical and reasons flawlessly.",
+        "Above all, each tiger wants to survive; it never makes a move that leaves it exposed to being eaten."
+      ],
+      "sandbox": {
+        "type": "tigers",
+        "minTigers": 1,
+        "maxTigers": 12,
+        "questionTigers": 100
+      },
+      "answer": {
+        "type": "binary",
+        "question": "With 100 tigers, is the sheep…",
+        "optionA": "Safe",
+        "optionB": "Eaten",
+        "correctIsA": true
+      },
+      "hints": [
+        "What happens with just 1 tiger? Then try 2. What changed?",
+        "When a tiger decides whether to eat, what does it need to be true about the world it wakes up in afterwards?",
+        "After a tiger eats, how many tigers are left facing the new sheep?",
+        "Line up the cases from small to large. What splits the safe outcomes from the eaten ones?"
+      ],
+      "whyExplanation": "Think about it from the smallest case up.\n\nWith 1 tiger, there is nothing to fear: that tiger eats the sheep and stays safe, because no other tiger is left to eat it. So 1 tiger → the sheep is eaten.\n\nWith 2 tigers, each tiger thinks: \"If I eat the sheep, I become a sheep — and then the other tiger is exactly in the 1-tiger situation, where eating is safe. It would eat me.\" So neither dares. 2 tigers → the sheep is safe.\n\nWith 3 tigers, a tiger reasons: \"If I eat, I become the sheep in a 2-tiger world — and we just saw the sheep is safe there. So I would survive.\" One of them eats. 3 tigers → eaten.\n\nThe pattern chains all the way up: a tiger eats only if, after it becomes the sheep, the remaining tigers form a \"sheep is safe\" situation. That flips with every added tiger. So the sheep is eaten when the number of tigers is ODD, and safe when it is EVEN.\n\n100 is even — so the sheep is safe. All 100 tigers, each perfectly logical, hold back, because each knows that eating would only hand itself to the next tiger in line.",
+      "comingSoon": false
+    },
+    {
+      "id": "make-the-target-2",
+      "title": "Make the Target II",
+      "tagline": "A trickier total — more tiles, fewer obvious paths.",
+      "category": "math",
+      "difficulty": 3,
+      "prompt": "Add some of the tiles so the total lands exactly on the target. Each tile can be used at most once.",
+      "rules": [
+        "Tap a tile to move it in or out of the tray.",
+        "The running total updates as you go — reach the target exactly."
+      ],
+      "sandbox": {
+        "type": "numberTiles",
+        "tiles": [
+          4,
+          6,
+          9,
+          13,
+          17
+        ],
+        "target": 30
+      },
+      "answer": {
+        "type": "reachTarget",
+        "target": 30
+      },
+      "hints": [
+        "Which pair of the larger tiles gets you close?",
+        "If you commit to the biggest tile, what exact amount is left to make?"
+      ],
+      "whyExplanation": "One clean route is 13 + 17 = 30; another is 4 + 9 + 17 = 30. As the set grows, the number of possible combinations explodes — which is exactly why \"subset sum\" is hard for computers at scale, even though a few tiles are easy for a person to eyeball.",
+      "comingSoon": false
+    },
+    {
+      "id": "will-it-balance-2",
+      "title": "Balance II",
+      "tagline": "Heavier on the left — how far out must the light weight go?",
+      "category": "physics",
+      "difficulty": 4,
+      "prompt": "A heavier weight sits close to the pivot on the left. Slide the lighter weight on the right until the beam settles level.",
+      "rules": [
+        "Drag the right-hand weight along the beam to change its distance.",
+        "The beam tips according to real weight and distance — feel your way to level."
+      ],
+      "sandbox": {
+        "type": "lever",
+        "leftWeight": 5.0,
+        "leftDistance": 3.0,
+        "rightWeight": 3.0,
+        "maxDistance": 6.0
+      },
+      "answer": {
+        "type": "goal",
+        "goalLabel": "Balance the beam"
+      },
+      "hints": [
+        "The left turning effect is weight times distance. What number is that?",
+        "The right weight is smaller — so its distance has to be correspondingly larger."
+      ],
+      "whyExplanation": "Torque = weight x distance. The left side is 5 x 3 = 15, so the right weight of 3 must sit at distance 5 (3 x 5 = 15). The lighter the weight, the farther out it must go to match.",
+      "comingSoon": false
+    },
+    {
+      "id": "tigers-and-sheep-99",
+      "title": "Tigers & Sheep: 99",
+      "tagline": "Same island, one fewer tiger. Does the answer flip?",
+      "category": "gameTheory",
+      "difficulty": 4,
+      "prompt": "Same rules as before — a tiger that eats the sheep becomes a sheep, and every tiger is perfectly logical and wants to survive.\n\nThis time there are 99 tigers. Is the sheep safe, or eaten?",
+      "rules": [
+        "Any tiger may eat the sheep — but eating it turns the eater into a sheep.",
+        "A newly-made sheep can then be eaten by any remaining tiger.",
+        "Every tiger reasons flawlessly and, above all, wants to survive."
+      ],
+      "sandbox": {
+        "type": "tigers",
+        "minTigers": 1,
+        "maxTigers": 12,
+        "questionTigers": 99
+      },
+      "answer": {
+        "type": "binary",
+        "question": "With 99 tigers, is the sheep…",
+        "optionA": "Safe",
+        "optionB": "Eaten",
+        "correctIsA": false
+      },
+      "hints": [
+        "You found the rule for 100. What was it about the number that mattered?",
+        "Is 99 the same kind of number as 100, or the opposite?"
+      ],
+      "whyExplanation": "The sheep is safe exactly when the number of tigers is even, because each tiger only eats if doing so leaves the remaining tigers in a \"sheep is safe\" position. 99 is odd — so one tiger safely eats, and the sheep is eaten. Dropping a single tiger flips the outcome.",
+      "comingSoon": false
+    },
+    {
+      "id": "make-the-target-3",
+      "title": "Make the Target III",
+      "tagline": "Six tiles, one exact total. Find the trio.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "Add some of the tiles so the total lands exactly on the target. Each tile can be used at most once.",
+      "rules": [
+        "Tap a tile to move it in or out of the tray.",
+        "The running total updates as you go — reach the target exactly."
+      ],
+      "sandbox": {
+        "type": "numberTiles",
+        "tiles": [
+          3,
+          7,
+          12,
+          19,
+          26,
+          34
+        ],
+        "target": 52
+      },
+      "answer": {
+        "type": "reachTarget",
+        "target": 52
+      },
+      "hints": [
+        "Is the target closer to two big tiles or three medium ones?",
+        "Try fixing the largest tile you might use, then solve what remains."
+      ],
+      "whyExplanation": "For example 7 + 19 + 26 = 52. With six tiles there are dozens of subsets to consider — a person prunes them with intuition, but a computer may have to check exponentially many. That gap is the whole point of the puzzle.",
+      "comingSoon": false
+    },
+    {
+      "id": "last-stone",
+      "title": "The Last Stone",
+      "tagline": "Take 1–3 stones, alternate turns. Can you always win?",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "There are 13 stones. You and your opponent take turns removing 1, 2, or 3 stones. You go first. Whoever takes the very last stone wins.\n\nPlaying perfectly against a perfect opponent, can the first player always force a win?",
+      "rules": [
+        "On your turn, remove 1, 2, or 3 stones.",
+        "You move first; the opponent then plays perfectly.",
+        "Taking the last stone wins the game."
+      ],
+      "sandbox": {
+        "type": "nim",
+        "stones": 13,
+        "maxTake": 3,
+        "lastTakeWins": true
+      },
+      "answer": {
+        "type": "binary",
+        "question": "Going first, can you always force a win?",
+        "optionA": "Yes",
+        "optionB": "No",
+        "correctIsA": true
+      },
+      "hints": [
+        "After both of you move once, how many stones can disappear in a full round?",
+        "Is there a \"safe\" number of stones you always want to hand back to your opponent?"
+      ],
+      "whyExplanation": "The magic number is 4 (one more than the most you can take). If you always leave a multiple of 4 stones for your opponent — 12, then 8, then 4 — they can never escape it: whatever they take (1–3), you take the rest of that round back to the next multiple of 4. From 13 you take 1 to leave 12, and you win every time. So yes, the first player can always force a win here.",
       "comingSoon": false
     }
   ]

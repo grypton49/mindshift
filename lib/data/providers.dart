@@ -2,9 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/config/app_config.dart';
+import 'models/player_profile.dart';
 import 'models/puzzle.dart';
 import 'models/puzzle_progress.dart';
+import 'progression.dart';
 import 'puzzles/puzzle_registry.dart';
+import 'repositories/profile_repository.dart';
 import 'repositories/progress_repository.dart';
 import 'repositories/puzzle_cache.dart';
 import 'repositories/puzzle_remote_source.dart';
@@ -77,6 +80,20 @@ final puzzleByIdProvider = Provider.family<Puzzle?, String>((ref, id) {
   return null;
 });
 
+/// The level ladder (ordered puzzles + unlock/solve state), recomputed whenever
+/// the puzzle list or the player's progress changes. Unlock is keyed off stable
+/// puzzle ids, so a pack refetch never re-locks a solved level.
+final levelsProvider = Provider<List<PuzzleLevel>>((ref) {
+  final puzzles = ref.watch(puzzleRegistryProvider);
+  final progress = ref.watch(progressProvider);
+  return buildLevels(puzzles, progress.solvedIds);
+});
+
+/// The player's current level (1-based).
+final currentLevelProvider = Provider<int>(
+  (ref) => currentLevelNumber(ref.watch(levelsProvider)),
+);
+
 /// Player progress (solved set + streak). Call `.markSolved(id)` on solve.
 final progressProvider =
     StateNotifierProvider<ProgressController, PuzzleProgress>(
@@ -133,6 +150,45 @@ class ProgressController extends StateNotifier<PuzzleProgress> {
       ),
       lastSolvedDay: today,
     );
+    await _repo.save(state);
+  }
+
+  /// Clears all solved state and the streak (used by the profile screen behind a
+  /// confirmation). Does NOT touch the player's profile.
+  Future<void> reset() async {
+    state = const PuzzleProgress();
+    await _repo.save(state);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Player profile (local identity: name + avatar). Stored under its own keys, so
+// it is independent of progress and of the puzzle pack.
+// ---------------------------------------------------------------------------
+
+final profileRepositoryProvider = Provider<ProfileRepository>(
+  (ref) => ProfileRepository(ref.watch(sharedPreferencesProvider)),
+);
+
+final profileProvider =
+    StateNotifierProvider<ProfileController, PlayerProfile>(
+      (ref) => ProfileController(ref.watch(profileRepositoryProvider)),
+    );
+
+class ProfileController extends StateNotifier<PlayerProfile> {
+  ProfileController(this._repo) : super(_repo.load());
+
+  final ProfileRepository _repo;
+
+  Future<void> setName(String name) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return;
+    state = state.copyWith(name: trimmed);
+    await _repo.save(state);
+  }
+
+  Future<void> setAvatar(String avatar) async {
+    state = state.copyWith(avatar: avatar);
     await _repo.save(state);
   }
 }

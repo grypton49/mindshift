@@ -122,6 +122,23 @@ class LeverSandboxSpec extends SandboxSpec {
   final double maxDistance;
 }
 
+/// A single-pile take-away game (Nim). The player always moves first and removes
+/// 1..[maxTake] stones from a pile of [stones]; the app plays a PERFECT opponent.
+/// [lastTakeWins] true = taking the last stone wins; false = whoever must take
+/// the last stone loses (misère). The sandbox lets the player play it out and
+/// discover the strategy themselves — it never states who "should" win.
+class NimSandboxSpec extends SandboxSpec {
+  const NimSandboxSpec({
+    required this.stones,
+    this.maxTake = 3,
+    this.lastTakeWins = true,
+  });
+
+  final int stones;
+  final int maxTake;
+  final bool lastTakeWins;
+}
+
 /// ============================================================================
 /// AnswerSpec — how the player commits a conclusion + a PURE correctness check.
 ///

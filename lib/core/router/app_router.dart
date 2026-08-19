@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 
 import '../../features/home/home_screen.dart';
+import '../../features/profile/profile_screen.dart';
 import '../../features/puzzle/puzzle_host_screen.dart';
 import '../../features/stats/stats_screen.dart';
 
@@ -8,6 +9,7 @@ import '../../features/stats/stats_screen.dart';
 abstract final class Routes {
   static const home = '/';
   static const stats = '/stats';
+  static const profile = '/profile';
 
   /// Path template for a puzzle; use [puzzlePath] to build a concrete location.
   static const puzzle = '/puzzle/:id';
@@ -21,6 +23,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: Routes.stats,
       builder: (context, state) => const StatsScreen(),
+    ),
+    GoRoute(
+      path: Routes.profile,
+      builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
       path: Routes.puzzle,
