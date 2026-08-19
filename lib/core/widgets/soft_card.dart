@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_palette.dart';
 import '../theme/app_spacing.dart';
 
 /// A rounded "paper" surface with a soft, low shadow — the base building block
@@ -24,11 +24,12 @@ class SoftCard extends StatelessWidget {
   /// Optional tap handler. When non-null the card shows an ink ripple.
   final VoidCallback? onTap;
 
-  /// Surface color. Defaults to [AppColors.surface].
+  /// Surface color. Defaults to the theme's surface (`context.palette.surface`).
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final borderRadius = BorderRadius.circular(AppSpacing.radiusLarge);
 
     Widget content = Padding(
@@ -42,8 +43,8 @@ class SoftCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: borderRadius,
-          splashColor: AppColors.accentSoft.withValues(alpha: 0.35),
-          highlightColor: AppColors.accentSoft.withValues(alpha: 0.18),
+          splashColor: c.accentSoft.withValues(alpha: 0.35),
+          highlightColor: c.accentSoft.withValues(alpha: 0.18),
           child: content,
         ),
       );
@@ -51,7 +52,7 @@ class SoftCard extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: color ?? AppColors.surface,
+        color: color ?? c.surface,
         borderRadius: borderRadius,
         boxShadow: const [
           BoxShadow(

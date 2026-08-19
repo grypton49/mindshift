@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/core/widgets/calm_scaffold.dart';
 import 'package:mindshift/core/widgets/insight_card.dart';
@@ -245,17 +245,19 @@ class _PuzzleHeader extends StatelessWidget {
 
   final Puzzle puzzle;
 
-  static Color _categoryColor(PuzzleCategory category) => switch (category) {
-    PuzzleCategory.gameTheory => AppColors.gameTheory,
-    PuzzleCategory.math => AppColors.math,
-    PuzzleCategory.physics => AppColors.physics,
-    PuzzleCategory.lateral => AppColors.lateral,
-  };
+  static Color _categoryColor(PuzzleCategory category, AppPalette palette) =>
+      switch (category) {
+        PuzzleCategory.gameTheory => palette.gameTheory,
+        PuzzleCategory.math => palette.math,
+        PuzzleCategory.physics => palette.physics,
+        PuzzleCategory.lateral => palette.lateral,
+      };
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final categoryColor = _categoryColor(puzzle.category);
+    final c = context.palette;
+    final categoryColor = _categoryColor(puzzle.category, c);
 
     return SoftCard(
       child: Column(
@@ -276,7 +278,7 @@ class _PuzzleHeader extends StatelessWidget {
           Text(
             puzzle.prompt,
             style: textTheme.titleMedium?.copyWith(
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
               height: 1.4,
               fontWeight: FontWeight.w600,
             ),
@@ -292,14 +294,14 @@ class _PuzzleHeader extends StatelessWidget {
                     Text(
                       '•  ',
                       style: textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
+                        color: c.textSecondary,
                       ),
                     ),
                     Expanded(
                       child: Text(
                         rule,
                         style: textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
+                          color: c.textSecondary,
                           height: 1.4,
                         ),
                       ),
@@ -352,6 +354,7 @@ class _DifficultyDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -363,7 +366,7 @@ class _DifficultyDots extends StatelessWidget {
               height: 8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: i < difficulty ? color : AppColors.surfaceMuted,
+                color: i < difficulty ? color : c.surfaceMuted,
               ),
             ),
           ),
@@ -379,23 +382,20 @@ class _ComingSoonPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final c = context.palette;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.spa_outlined,
-              size: 44,
-              color: AppColors.textSecondary,
-            ),
+            Icon(Icons.spa_outlined, size: 44, color: c.textSecondary),
             const SizedBox(height: AppSpacing.md),
             Text(
               'This puzzle is coming soon',
               textAlign: TextAlign.center,
               style: textTheme.titleMedium?.copyWith(
-                color: AppColors.textPrimary,
+                color: c.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -405,7 +405,7 @@ class _ComingSoonPlaceholder extends StatelessWidget {
               'way.',
               textAlign: TextAlign.center,
               style: textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
+                color: c.textSecondary,
                 height: 1.4,
               ),
             ),

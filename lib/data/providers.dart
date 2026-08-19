@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -190,5 +191,38 @@ class ProfileController extends StateNotifier<PlayerProfile> {
   Future<void> setAvatar(String avatar) async {
     state = state.copyWith(avatar: avatar);
     await _repo.save(state);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Theme mode (system / light / dark). Persisted under its own key, independent
+// of progress, profile, and the puzzle pack.
+// ---------------------------------------------------------------------------
+
+final themeModeProvider =
+    StateNotifierProvider<ThemeController, ThemeMode>(
+      (ref) => ThemeController(ref.watch(sharedPreferencesProvider)),
+    );
+
+class ThemeController extends StateNotifier<ThemeMode> {
+  ThemeController(this._prefs) : super(_read(_prefs));
+
+  final SharedPreferences _prefs;
+  static const _kThemeMode = 'mindshift.themeMode';
+
+  static ThemeMode _read(SharedPreferences prefs) {
+    switch (prefs.getString(_kThemeMode)) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
+  }
+
+  Future<void> setMode(ThemeMode mode) async {
+    state = mode;
+    await _prefs.setString(_kThemeMode, mode.name);
   }
 }

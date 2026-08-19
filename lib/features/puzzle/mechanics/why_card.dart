@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 
 /// A gentle "why it works" card, rendered on a soft accent surface.
@@ -20,13 +20,14 @@ class WhyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.accentSoft,
+        color: c.accentSoft,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
       ),
       child: Column(
@@ -35,16 +36,12 @@ class WhyCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.lightbulb_outline_rounded,
-                size: 20,
-                color: AppColors.accent,
-              ),
+              Icon(Icons.lightbulb_outline_rounded, size: 20, color: c.accent),
               const SizedBox(width: AppSpacing.sm),
               Text(
                 title ?? 'Why it works',
                 style: textTheme.titleMedium?.copyWith(
-                  color: AppColors.textPrimary,
+                  color: c.textPrimary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -54,7 +51,7 @@ class WhyCard extends StatelessWidget {
           Text(
             explanation,
             style: textTheme.bodyMedium?.copyWith(
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
               height: 1.5,
             ),
           ),

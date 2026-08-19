@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_palette.dart';
 import '../theme/app_spacing.dart';
 
 /// A gentle, softly-highlighted card used for post-solve "why" explanations and
@@ -21,18 +21,19 @@ class InsightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.accentSoft,
+        color: c.accentSoft,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (icon != null) ...[
-            Icon(icon, color: AppColors.accent, size: 22),
+            Icon(icon, color: c.accent, size: 22),
             const SizedBox(width: AppSpacing.md),
           ],
           Expanded(
@@ -46,7 +47,7 @@ class InsightCard extends StatelessWidget {
                     style: GoogleFonts.nunito(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.accent,
+                      color: c.accent,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
@@ -56,7 +57,7 @@ class InsightCard extends StatelessWidget {
                   style: GoogleFonts.nunito(
                     fontSize: 15,
                     height: 1.5,
-                    color: AppColors.textPrimary,
+                    color: c.textPrimary,
                   ),
                 ),
               ],

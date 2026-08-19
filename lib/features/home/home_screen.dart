@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:mindshift/core/router/app_router.dart';
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/core/widgets/calm_scaffold.dart';
 import 'package:mindshift/core/widgets/soft_card.dart';
@@ -76,6 +76,7 @@ class _AvatarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Padding(
       padding: const EdgeInsets.only(right: AppSpacing.sm),
       child: Tooltip(
@@ -89,8 +90,8 @@ class _AvatarButton extends StatelessWidget {
               width: 40,
               height: 40,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: AppColors.accentSoft,
+              decoration: BoxDecoration(
+                color: c.accentSoft,
                 shape: BoxShape.circle,
               ),
               child: Text(avatar, style: const TextStyle(fontSize: 20)),
@@ -117,6 +118,7 @@ class _Greeting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -125,7 +127,7 @@ class _Greeting extends StatelessWidget {
           style: GoogleFonts.nunito(
             fontSize: 34,
             fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+            color: c.textPrimary,
             letterSpacing: -0.5,
           ),
         ),
@@ -135,7 +137,7 @@ class _Greeting extends StatelessWidget {
           style: GoogleFonts.nunito(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: AppColors.textSecondary,
+            color: c.textSecondary,
             height: 1.4,
           ),
         ),
@@ -164,13 +166,14 @@ class _StreakPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.accentSoft,
+        color: c.accentSoft,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
       ),
       child: Text(
@@ -178,7 +181,7 @@ class _StreakPill extends StatelessWidget {
         style: GoogleFonts.nunito(
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: AppColors.accent,
+          color: c.accent,
         ),
       ),
     );
@@ -194,26 +197,27 @@ class _LevelIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
+        color: c.surfaceMuted,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.route_rounded, size: 16, color: AppColors.accent),
+          Icon(Icons.route_rounded, size: 16, color: c.accent),
           const SizedBox(width: AppSpacing.xs + 2),
           Text(
             'Level $current of $total',
             style: GoogleFonts.nunito(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
             ),
           ),
         ],
@@ -234,9 +238,10 @@ class _PathConnector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final color = completed
-        ? AppColors.accent.withValues(alpha: 0.5)
-        : AppColors.textSecondary.withValues(alpha: 0.25);
+        ? c.accent.withValues(alpha: 0.5)
+        : c.textSecondary.withValues(alpha: 0.25);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Column(
@@ -266,6 +271,7 @@ class _LevelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final puzzle = level.puzzle;
     final state = !level.unlocked
         ? _LevelState.locked
@@ -292,7 +298,7 @@ class _LevelCard extends StatelessWidget {
     }
 
     Widget card = SoftCard(
-      color: locked ? AppColors.surfaceMuted : AppColors.surface,
+      color: locked ? c.surfaceMuted : c.surface,
       onTap: locked ? null : () => context.push(Routes.puzzlePath(puzzle.id)),
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
@@ -312,9 +318,7 @@ class _LevelCard extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.6,
-                        color: locked
-                            ? AppColors.textSecondary
-                            : AppColors.accent,
+                        color: locked ? c.textSecondary : c.accent,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -324,9 +328,7 @@ class _LevelCard extends StatelessWidget {
                         fontSize: 19,
                         fontWeight: FontWeight.w800,
                         height: 1.15,
-                        color: locked
-                            ? AppColors.textSecondary
-                            : AppColors.textPrimary,
+                        color: locked ? c.textSecondary : c.textPrimary,
                       ),
                     ),
                   ],
@@ -347,7 +349,7 @@ class _LevelCard extends StatelessWidget {
               fontSize: 14,
               fontWeight: FontWeight.w500,
               height: 1.4,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -362,10 +364,10 @@ class _LevelCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.lock_outline_rounded,
                   size: 15,
-                  color: AppColors.textSecondary,
+                  color: c.textSecondary,
                 ),
                 const SizedBox(width: AppSpacing.xs),
                 Expanded(
@@ -374,7 +376,7 @@ class _LevelCard extends StatelessWidget {
                     style: GoogleFonts.nunito(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                     ),
                   ),
                 ),
@@ -390,7 +392,7 @@ class _LevelCard extends StatelessWidget {
       card = Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
-          border: Border.all(color: AppColors.accent, width: 2),
+          border: Border.all(color: c.accent, width: 2),
         ),
         child: card,
       );
@@ -410,6 +412,7 @@ class _NodeMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     const size = 40.0;
 
     switch (state) {
@@ -418,11 +421,8 @@ class _NodeMarker extends StatelessWidget {
           width: size,
           height: size,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: AppColors.accent,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.check_rounded, size: 20, color: Colors.white),
+          decoration: BoxDecoration(color: c.accent, shape: BoxShape.circle),
+          child: Icon(Icons.check_rounded, size: 20, color: c.onAccent),
         );
       case _LevelState.current:
         return Container(
@@ -430,16 +430,16 @@ class _NodeMarker extends StatelessWidget {
           height: size,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.accentSoft,
+            color: c.accentSoft,
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.accent, width: 2),
+            border: Border.all(color: c.accent, width: 2),
           ),
           child: Text(
             '$levelNumber',
             style: GoogleFonts.nunito(
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: AppColors.accent,
+              color: c.accent,
             ),
           ),
         );
@@ -448,14 +448,11 @@ class _NodeMarker extends StatelessWidget {
           width: size,
           height: size,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
+          decoration: BoxDecoration(color: c.surface, shape: BoxShape.circle),
+          child: Icon(
             Icons.lock_outline_rounded,
             size: 18,
-            color: AppColors.textSecondary,
+            color: c.textSecondary,
           ),
         );
       case _LevelState.open:
@@ -463,8 +460,8 @@ class _NodeMarker extends StatelessWidget {
           width: size,
           height: size,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: AppColors.surfaceMuted,
+          decoration: BoxDecoration(
+            color: c.surfaceMuted,
             shape: BoxShape.circle,
           ),
           child: Text(
@@ -472,7 +469,7 @@ class _NodeMarker extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
             ),
           ),
         );
@@ -490,13 +487,14 @@ class _ActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: filled ? AppColors.accent : AppColors.accentSoft,
+        color: filled ? c.accent : c.accentSoft,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
       ),
       child: Row(
@@ -507,14 +505,14 @@ class _ActionChip extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 13,
               fontWeight: FontWeight.w700,
-              color: filled ? Colors.white : AppColors.accent,
+              color: filled ? c.onAccent : c.accent,
             ),
           ),
           const SizedBox(width: AppSpacing.xs),
           Icon(
             Icons.arrow_forward_rounded,
             size: 15,
-            color: filled ? Colors.white : AppColors.accent,
+            color: filled ? c.onAccent : c.accent,
           ),
         ],
       ),
@@ -531,7 +529,8 @@ class _CategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = muted ? AppColors.textSecondary : _categoryColor(category);
+    final c = context.palette;
+    final color = muted ? c.textSecondary : _categoryColor(context, category);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm + 2,
@@ -562,7 +561,8 @@ class _DifficultyDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filledColor = muted ? AppColors.textSecondary : AppColors.accent;
+    final c = context.palette;
+    final filledColor = muted ? c.textSecondary : c.accent;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -575,7 +575,7 @@ class _DifficultyDots extends StatelessWidget {
               shape: BoxShape.circle,
               color: i <= difficulty
                   ? filledColor
-                  : AppColors.textSecondary.withValues(alpha: 0.22),
+                  : c.textSecondary.withValues(alpha: 0.22),
             ),
           ),
         ],
@@ -590,11 +590,12 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return SoftCard(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Column(
         children: [
-          const Icon(Icons.spa_rounded, size: 40, color: AppColors.accent),
+          Icon(Icons.spa_rounded, size: 40, color: c.accent),
           const SizedBox(height: AppSpacing.md),
           Text(
             'New puzzles coming soon',
@@ -602,7 +603,7 @@ class _EmptyState extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -612,7 +613,7 @@ class _EmptyState extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
               height: 1.45,
             ),
           ),
@@ -622,16 +623,17 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-/// Maps a category to its calm accent color.
-Color _categoryColor(PuzzleCategory category) {
+/// Maps a category to its calm accent color from the active [AppPalette].
+Color _categoryColor(BuildContext context, PuzzleCategory category) {
+  final c = context.palette;
   switch (category) {
     case PuzzleCategory.gameTheory:
-      return AppColors.gameTheory;
+      return c.gameTheory;
     case PuzzleCategory.math:
-      return AppColors.math;
+      return c.math;
     case PuzzleCategory.physics:
-      return AppColors.physics;
+      return c.physics;
     case PuzzleCategory.lateral:
-      return AppColors.lateral;
+      return c.lateral;
   }
 }

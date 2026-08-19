@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/data/models/puzzle.dart';
 
@@ -96,6 +96,7 @@ class _TigersSandboxState extends State<TigersSandbox> {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
     final spec = widget.spec;
     final divisions = (spec.maxTigers - spec.minTigers).clamp(1, 1000);
@@ -111,11 +112,11 @@ class _TigersSandboxState extends State<TigersSandbox> {
             Expanded(
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: AppColors.accent,
-                  inactiveTrackColor: AppColors.surfaceMuted,
-                  thumbColor: AppColors.accent,
-                  overlayColor: AppColors.accentSoft,
-                  valueIndicatorColor: AppColors.accent,
+                  activeTrackColor: c.accent,
+                  inactiveTrackColor: c.surfaceMuted,
+                  thumbColor: c.accent,
+                  overlayColor: c.accentSoft,
+                  valueIndicatorColor: c.accent,
                 ),
                 child: Slider(
                   value: _chosenCount.toDouble(),
@@ -132,9 +133,7 @@ class _TigersSandboxState extends State<TigersSandbox> {
               child: Text(
                 '$_chosenCount tigers',
                 textAlign: TextAlign.end,
-                style: textTheme.labelLarge?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+                style: textTheme.labelLarge?.copyWith(color: c.textSecondary),
               ),
             ),
           ],
@@ -145,7 +144,7 @@ class _TigersSandboxState extends State<TigersSandbox> {
           width: double.infinity,
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
-            color: AppColors.surfaceMuted,
+            color: c.surfaceMuted,
             borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
           ),
           child: Column(
@@ -160,7 +159,7 @@ class _TigersSandboxState extends State<TigersSandbox> {
                 onBite: _bite,
               ),
               const SizedBox(height: AppSpacing.md),
-              Divider(color: AppColors.background, height: 1),
+              Divider(color: c.background, height: 1),
               const SizedBox(height: AppSpacing.md),
               // The flock of tigers.
               _FlockArea(
@@ -180,16 +179,14 @@ class _TigersSandboxState extends State<TigersSandbox> {
                 _tigersRemaining > 0
                     ? 'Drag a tiger onto the sheep, or tap it, to try a bite'
                     : 'No tigers left to experiment with',
-                style: textTheme.bodySmall?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+                style: textTheme.bodySmall?.copyWith(color: c.textSecondary),
               ),
             ),
             TextButton.icon(
               onPressed: _reset,
               icon: const Icon(Icons.refresh_rounded, size: 18),
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.textSecondary,
+                foregroundColor: c.textSecondary,
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -223,6 +220,7 @@ class _SheepZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return DragTarget<int>(
@@ -240,10 +238,10 @@ class _SheepZone extends StatelessWidget {
               vertical: AppSpacing.md,
             ),
             decoration: BoxDecoration(
-              color: hovering ? AppColors.accentSoft : AppColors.surface,
+              color: hovering ? c.accentSoft : c.surface,
               borderRadius: BorderRadius.circular(AppSpacing.radius),
               border: Border.all(
-                color: hovering ? AppColors.accent : AppColors.surfaceMuted,
+                color: hovering ? c.accent : c.surfaceMuted,
                 width: 2,
               ),
             ),
@@ -275,9 +273,7 @@ class _SheepZone extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   'the sheep',
-                  style: textTheme.labelSmall?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+                  style: textTheme.labelSmall?.copyWith(color: c.textSecondary),
                 ),
               ],
             ),
@@ -302,6 +298,7 @@ class _FlockArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return Column(
@@ -310,9 +307,7 @@ class _FlockArea extends StatelessWidget {
       children: [
         Text(
           count == 1 ? '1 tiger' : '$count tigers',
-          style: textTheme.labelMedium?.copyWith(
-            color: AppColors.textSecondary,
-          ),
+          style: textTheme.labelMedium?.copyWith(color: c.textSecondary),
         ),
         const SizedBox(height: AppSpacing.sm),
         SizedBox(
@@ -334,7 +329,7 @@ class _FlockArea extends StatelessWidget {
                   child: Text(
                     '(none)',
                     style: textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                     ),
                   ),
                 ),
@@ -359,6 +354,7 @@ class _TigerChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final chip = Opacity(
       opacity: faded ? 0.3 : 1,
       child: Container(
@@ -366,9 +362,9 @@ class _TigerChip extends StatelessWidget {
         height: 48,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: c.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: AppColors.surfaceMuted, width: 1.5),
+          border: Border.all(color: c.surfaceMuted, width: 1.5),
           boxShadow: elevated
               ? const [
                   BoxShadow(

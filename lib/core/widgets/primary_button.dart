@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_palette.dart';
 import '../theme/app_spacing.dart';
 
 /// The main call-to-action: an accent-filled, generously rounded button with a
@@ -30,11 +30,12 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final style = ElevatedButton.styleFrom(
-      backgroundColor: AppColors.accent,
-      foregroundColor: Colors.white,
-      disabledBackgroundColor: AppColors.surfaceMuted,
-      disabledForegroundColor: AppColors.textSecondary,
+      backgroundColor: c.accent,
+      foregroundColor: c.onAccent,
+      disabledBackgroundColor: c.surfaceMuted,
+      disabledForegroundColor: c.textSecondary,
       elevation: 0,
       minimumSize: const Size(0, 52),
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
@@ -78,9 +79,10 @@ class GhostButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final style = TextButton.styleFrom(
-      foregroundColor: AppColors.accent,
-      disabledForegroundColor: AppColors.textSecondary,
+      foregroundColor: c.accent,
+      disabledForegroundColor: c.textSecondary,
       minimumSize: const Size(0, 48),
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       shape: RoundedRectangleBorder(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 
 /// A calm bottom action bar for committing an answer.
@@ -11,7 +11,7 @@ import 'package:mindshift/core/theme/app_spacing.dart';
 /// NO-VERDICT CONTRACT: this widget never renders the correct answer. Feedback
 /// is limited to whatever encouraging string the host passes (e.g. "Not quite —
 /// keep exploring" / "You solved it!"). When [solved] is true the message uses
-/// [AppColors.positive]; otherwise [AppColors.nudge] — a warm, non-shaming hue.
+/// [AppPalette.positive]; otherwise [AppPalette.nudge] — a warm, non-shaming hue.
 class AnswerBar extends StatelessWidget {
   const AnswerBar({
     super.key,
@@ -35,17 +35,18 @@ class AnswerBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
     final message = feedbackMessage;
 
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: const BorderRadius.vertical(
           top: Radius.circular(AppSpacing.radiusLarge),
         ),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Color(0x0F000000),
             blurRadius: 24,
@@ -82,9 +83,7 @@ class AnswerBar extends StatelessWidget {
                                   ? Icons.check_circle_outline
                                   : Icons.spa_outlined,
                               size: 18,
-                              color: solved
-                                  ? AppColors.positive
-                                  : AppColors.nudge,
+                              color: solved ? c.positive : c.nudge,
                             ),
                             const SizedBox(width: AppSpacing.sm),
                             Flexible(
@@ -92,9 +91,7 @@ class AnswerBar extends StatelessWidget {
                                 message,
                                 textAlign: TextAlign.center,
                                 style: textTheme.bodyMedium?.copyWith(
-                                  color: solved
-                                      ? AppColors.positive
-                                      : AppColors.nudge,
+                                  color: solved ? c.positive : c.nudge,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -111,6 +108,7 @@ class AnswerBar extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context) {
+    final c = context.palette;
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppSpacing.radius),
     );
@@ -123,10 +121,10 @@ class AnswerBar extends StatelessWidget {
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(56),
           shape: shape,
-          backgroundColor: AppColors.positive,
-          disabledBackgroundColor: AppColors.positive,
-          foregroundColor: Colors.white,
-          disabledForegroundColor: Colors.white,
+          backgroundColor: c.positive,
+          disabledBackgroundColor: c.positive,
+          foregroundColor: c.onAccent,
+          disabledForegroundColor: c.onAccent,
           textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
         ),
       );
@@ -137,10 +135,10 @@ class AnswerBar extends StatelessWidget {
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(56),
         shape: shape,
-        backgroundColor: AppColors.accent,
-        disabledBackgroundColor: AppColors.surfaceMuted,
-        foregroundColor: Colors.white,
-        disabledForegroundColor: AppColors.textSecondary,
+        backgroundColor: c.accent,
+        disabledBackgroundColor: c.surfaceMuted,
+        foregroundColor: c.onAccent,
+        disabledForegroundColor: c.textSecondary,
         textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
       ),
       child: const Text('Check my answer'),

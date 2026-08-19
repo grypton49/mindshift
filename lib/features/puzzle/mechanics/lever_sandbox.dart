@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/data/models/puzzle.dart';
 
@@ -109,6 +109,7 @@ class _LeverSandboxState extends State<LeverSandbox> {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return Column(
@@ -144,7 +145,7 @@ class _LeverSandboxState extends State<LeverSandbox> {
         Text(
           'Drag the right weight along the beam',
           textAlign: TextAlign.center,
-          style: textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+          style: textTheme.bodySmall?.copyWith(color: c.textSecondary),
         ),
       ],
     );
@@ -178,6 +179,7 @@ class _BeamPainterArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final pivotX = width / 2;
     final halfLen = pivotX - edgeInset;
     final pxPerUnit = maxDistance == 0 ? 0.0 : halfLen / maxDistance;
@@ -200,7 +202,7 @@ class _BeamPainterArea extends StatelessWidget {
           left: pivotX - 26,
           child: CustomPaint(
             size: const Size(52, 40),
-            painter: _FulcrumPainter(),
+            painter: _FulcrumPainter(color: c.textSecondary),
           ),
         ),
         // Base line.
@@ -211,7 +213,7 @@ class _BeamPainterArea extends StatelessWidget {
           child: Container(
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.surfaceMuted,
+              color: c.surfaceMuted,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -235,7 +237,7 @@ class _BeamPainterArea extends StatelessWidget {
                     child: Container(
                       height: _beamThickness,
                       decoration: BoxDecoration(
-                        color: AppColors.accent,
+                        color: c.accent,
                         borderRadius: BorderRadius.circular(_beamThickness / 2),
                       ),
                     ),
@@ -244,10 +246,7 @@ class _BeamPainterArea extends StatelessWidget {
                   Positioned(
                     left: (halfLen - leftFrac) - _weightSize / 2,
                     top: beamCenterY - _beamThickness / 2 - _weightSize,
-                    child: _WeightDisc(
-                      value: leftWeight,
-                      color: AppColors.secondary,
-                    ),
+                    child: _WeightDisc(value: leftWeight, color: c.secondary),
                   ),
                   // Right (draggable) weight.
                   Positioned(
@@ -255,7 +254,7 @@ class _BeamPainterArea extends StatelessWidget {
                     top: beamCenterY - _beamThickness / 2 - _weightSize,
                     child: _WeightDisc(
                       value: rightWeight,
-                      color: AppColors.accent,
+                      color: c.accent,
                       grabbable: true,
                     ),
                   ),
@@ -290,6 +289,7 @@ class _WeightDisc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Container(
       width: _size,
       height: _size,
@@ -298,7 +298,7 @@ class _WeightDisc extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(14),
         border: grabbable
-            ? Border.all(color: Colors.white.withValues(alpha: 0.8), width: 2)
+            ? Border.all(color: c.onAccent.withValues(alpha: 0.8), width: 2)
             : null,
         boxShadow: const [
           BoxShadow(
@@ -310,8 +310,8 @@ class _WeightDisc extends StatelessWidget {
       ),
       child: Text(
         _label,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: c.onAccent,
           fontSize: 16,
           fontWeight: FontWeight.w800,
         ),
@@ -321,10 +321,14 @@ class _WeightDisc extends StatelessWidget {
 }
 
 class _FulcrumPainter extends CustomPainter {
+  _FulcrumPainter({required this.color});
+
+  final Color color;
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.textSecondary
+      ..color = color
       ..style = PaintingStyle.fill;
     final path = Path()
       ..moveTo(size.width / 2, 0)
@@ -335,5 +339,6 @@ class _FulcrumPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _FulcrumPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _FulcrumPainter oldDelegate) =>
+      oldDelegate.color != color;
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/core/widgets/calm_scaffold.dart';
 import 'package:mindshift/core/widgets/insight_card.dart';
@@ -78,6 +78,7 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return SoftCard(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Column(
@@ -88,7 +89,7 @@ class _SummaryCard extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
               letterSpacing: 0.4,
             ),
           ),
@@ -102,7 +103,7 @@ class _SummaryCard extends StatelessWidget {
                 style: GoogleFonts.nunito(
                   fontSize: 48,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.accent,
+                  color: c.accent,
                   height: 1.0,
                 ),
               ),
@@ -112,7 +113,7 @@ class _SummaryCard extends StatelessWidget {
                 style: GoogleFonts.nunito(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
+                  color: c.textSecondary,
                 ),
               ),
             ],
@@ -123,8 +124,8 @@ class _SummaryCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: fraction,
               minHeight: 10,
-              backgroundColor: AppColors.surfaceMuted,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accent),
+              backgroundColor: c.surfaceMuted,
+              valueColor: AlwaysStoppedAnimation<Color>(c.accent),
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -133,7 +134,7 @@ class _SummaryCard extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
               height: 1.4,
             ),
           ),
@@ -160,6 +161,7 @@ class _StreakCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final active = streak > 0;
     return SoftCard(
       child: Row(
@@ -167,8 +169,8 @@ class _StreakCard extends StatelessWidget {
           Container(
             width: 48,
             height: 48,
-            decoration: const BoxDecoration(
-              color: AppColors.accentSoft,
+            decoration: BoxDecoration(
+              color: c.accentSoft,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
@@ -187,7 +189,7 @@ class _StreakCard extends StatelessWidget {
                   style: GoogleFonts.nunito(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
+                    color: c.textPrimary,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -198,7 +200,7 @@ class _StreakCard extends StatelessWidget {
                   style: GoogleFonts.nunito(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.textSecondary,
+                    color: c.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -219,6 +221,7 @@ class _SolvedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -232,7 +235,7 @@ class _SolvedList extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 13,
               fontWeight: FontWeight.w700,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
               letterSpacing: 0.8,
             ),
           ),
@@ -246,19 +249,15 @@ class _SolvedList extends StatelessWidget {
             children: [
               for (var i = 0; i < solved.length; i++) ...[
                 if (i > 0)
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: AppColors.surfaceMuted,
-                  ),
+                  Divider(height: 1, thickness: 1, color: c.surfaceMuted),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.check_circle_rounded,
                         size: 20,
-                        color: AppColors.positive,
+                        color: c.positive,
                       ),
                       const SizedBox(width: AppSpacing.md),
                       Expanded(
@@ -267,7 +266,7 @@ class _SolvedList extends StatelessWidget {
                           style: GoogleFonts.nunito(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
+                            color: c.textPrimary,
                           ),
                         ),
                       ),
@@ -276,7 +275,7 @@ class _SolvedList extends StatelessWidget {
                         style: GoogleFonts.nunito(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondary,
+                          color: c.textSecondary,
                         ),
                       ),
                     ],

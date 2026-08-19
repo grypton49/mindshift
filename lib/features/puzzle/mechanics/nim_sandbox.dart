@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_palette.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../data/models/puzzle.dart';
 import '../../../data/puzzles/nim_logic.dart';
@@ -96,6 +96,7 @@ class _NimSandboxState extends State<NimSandbox> {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final maxTake = widget.spec.maxTake;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,8 +110,8 @@ class _NimSandboxState extends State<NimSandbox> {
             fontSize: 15,
             fontWeight: FontWeight.w600,
             color: _gameOver
-                ? (_youWon ? AppColors.positive : AppColors.nudge)
-                : AppColors.textSecondary,
+                ? (_youWon ? c.positive : c.nudge)
+                : c.textSecondary,
           ),
         ),
         const SizedBox(height: AppSpacing.md),
@@ -149,10 +150,11 @@ class _StonePile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
+        color: c.surfaceMuted,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
       ),
       child: Column(
@@ -169,8 +171,8 @@ class _StonePile extends StatelessWidget {
                   height: 22,
                   decoration: BoxDecoration(
                     color: i < remaining
-                        ? AppColors.accent
-                        : AppColors.accent.withValues(alpha: 0.12),
+                        ? c.accent
+                        : c.accent.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -179,10 +181,10 @@ class _StonePile extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             '$remaining left',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
             ),
           ),
         ],

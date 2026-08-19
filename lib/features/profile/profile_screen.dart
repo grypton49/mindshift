@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/router/app_router.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_palette.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/widgets/calm_scaffold.dart';
 import '../../core/widgets/primary_button.dart';
@@ -24,6 +24,8 @@ class ProfileScreen extends ConsumerWidget {
     final progress = ref.watch(progressProvider);
     final currentLevel = ref.watch(currentLevelProvider);
     final totalLevels = ref.watch(levelsProvider).length;
+    final themeMode = ref.watch(themeModeProvider);
+    final c = context.palette;
 
     return CalmScaffold(
       title: 'Profile',
@@ -56,6 +58,14 @@ class ProfileScreen extends ConsumerWidget {
               streak: progress.streak,
               onViewDetails: () => context.push(Routes.stats),
             ),
+            const SizedBox(height: AppSpacing.xl),
+            _SectionLabel('Appearance'),
+            const SizedBox(height: AppSpacing.md),
+            _AppearancePicker(
+              mode: themeMode,
+              onSelect: (mode) =>
+                  ref.read(themeModeProvider.notifier).setMode(mode),
+            ),
             const SizedBox(height: AppSpacing.xxl),
             Center(
               child: GhostButton(
@@ -68,10 +78,7 @@ class ProfileScreen extends ConsumerWidget {
             Center(
               child: Text(
                 'Your name and avatar always stay.',
-                style: GoogleFonts.nunito(
-                  fontSize: 13,
-                  color: AppColors.textSecondary,
-                ),
+                style: GoogleFonts.nunito(fontSize: 13, color: c.textSecondary),
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -93,8 +100,9 @@ class ProfileScreen extends ConsumerWidget {
       final result = await showDialog<String>(
         context: context,
         builder: (context) {
+          final c = context.palette;
           return AlertDialog(
-            backgroundColor: AppColors.surface,
+            backgroundColor: c.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppSpacing.radius),
             ),
@@ -103,7 +111,7 @@ class ProfileScreen extends ConsumerWidget {
               style: GoogleFonts.nunito(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                color: c.textPrimary,
               ),
             ),
             content: TextField(
@@ -112,22 +120,19 @@ class ProfileScreen extends ConsumerWidget {
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.done,
               onSubmitted: (value) => Navigator.of(context).pop(value),
-              style: GoogleFonts.nunito(
-                fontSize: 16,
-                color: AppColors.textPrimary,
-              ),
-              cursorColor: AppColors.accent,
+              style: GoogleFonts.nunito(fontSize: 16, color: c.textPrimary),
+              cursorColor: c.accent,
               decoration: InputDecoration(
                 hintText: 'Your name',
                 filled: true,
-                fillColor: AppColors.surfaceMuted,
+                fillColor: c.surfaceMuted,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.radius),
                   borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.radius),
-                  borderSide: const BorderSide(color: AppColors.accent),
+                  borderSide: BorderSide(color: c.accent),
                 ),
               ),
             ),
@@ -165,8 +170,9 @@ class ProfileScreen extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
+        final c = context.palette;
         return AlertDialog(
-          backgroundColor: AppColors.surface,
+          backgroundColor: c.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radius),
           ),
@@ -175,7 +181,7 @@ class ProfileScreen extends ConsumerWidget {
             style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
             ),
           ),
           content: Text(
@@ -184,7 +190,7 @@ class ProfileScreen extends ConsumerWidget {
             style: GoogleFonts.nunito(
               fontSize: 15,
               height: 1.5,
-              color: AppColors.textSecondary,
+              color: c.textSecondary,
             ),
           ),
           actionsPadding: const EdgeInsets.fromLTRB(
@@ -201,7 +207,7 @@ class ProfileScreen extends ConsumerWidget {
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.nudge,
+                foregroundColor: c.nudge,
                 minimumSize: const Size(0, 48),
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 shape: RoundedRectangleBorder(
@@ -240,6 +246,7 @@ class _IdentityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return SoftCard(
       onTap: onEdit,
       child: Row(
@@ -247,8 +254,8 @@ class _IdentityCard extends StatelessWidget {
           Container(
             width: 72,
             height: 72,
-            decoration: const BoxDecoration(
-              color: AppColors.accentSoft,
+            decoration: BoxDecoration(
+              color: c.accentSoft,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
@@ -264,7 +271,7 @@ class _IdentityCard extends StatelessWidget {
                   'Hello,',
                   style: GoogleFonts.nunito(
                     fontSize: 14,
-                    color: AppColors.textSecondary,
+                    color: c.textSecondary,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -275,7 +282,7 @@ class _IdentityCard extends StatelessWidget {
                   style: GoogleFonts.nunito(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                    color: c.textPrimary,
                   ),
                 ),
               ],
@@ -284,7 +291,7 @@ class _IdentityCard extends StatelessWidget {
           IconButton(
             onPressed: onEdit,
             icon: const Icon(Icons.edit_rounded),
-            color: AppColors.accent,
+            color: c.accent,
             tooltip: 'Edit name',
           ),
         ],
@@ -332,6 +339,7 @@ class _AvatarTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Semantics(
       selected: isSelected,
       button: true,
@@ -346,10 +354,10 @@ class _AvatarTile extends StatelessWidget {
           height: 54,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.accentSoft : AppColors.surfaceMuted,
+            color: isSelected ? c.accentSoft : c.surfaceMuted,
             borderRadius: BorderRadius.circular(AppSpacing.radius),
             border: Border.all(
-              color: isSelected ? AppColors.accent : Colors.transparent,
+              color: isSelected ? c.accent : Colors.transparent,
               width: 2,
             ),
           ),
@@ -427,6 +435,7 @@ class _StatRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Row(
@@ -434,21 +443,18 @@ class _StatRow extends StatelessWidget {
           Container(
             width: 40,
             height: 40,
-            decoration: const BoxDecoration(
-              color: AppColors.accentSoft,
+            decoration: BoxDecoration(
+              color: c.accentSoft,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Icon(icon, color: AppColors.accent, size: 20),
+            child: Icon(icon, color: c.accent, size: 20),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(
               label,
-              style: GoogleFonts.nunito(
-                fontSize: 15,
-                color: AppColors.textSecondary,
-              ),
+              style: GoogleFonts.nunito(fontSize: 15, color: c.textSecondary),
             ),
           ),
           Text(
@@ -456,7 +462,7 @@ class _StatRow extends StatelessWidget {
             style: GoogleFonts.nunito(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+              color: c.textPrimary,
             ),
           ),
         ],
@@ -470,11 +476,8 @@ class _StatDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(
-      height: AppSpacing.md,
-      thickness: 1,
-      color: AppColors.surfaceMuted,
-    );
+    final c = context.palette;
+    return Divider(height: AppSpacing.md, thickness: 1, color: c.surfaceMuted);
   }
 }
 
@@ -485,6 +488,7 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Padding(
       padding: const EdgeInsets.only(left: AppSpacing.xs),
       child: Text(
@@ -492,7 +496,113 @@ class _SectionLabel extends StatelessWidget {
         style: GoogleFonts.nunito(
           fontSize: 16,
           fontWeight: FontWeight.w700,
-          color: AppColors.textPrimary,
+          color: c.textPrimary,
+        ),
+      ),
+    );
+  }
+}
+
+/// A calm three-option picker for the app's theme mode (System / Light / Dark).
+/// The active choice is washed in accent and ringed, matching the avatar
+/// picker's selection style.
+class _AppearancePicker extends StatelessWidget {
+  const _AppearancePicker({required this.mode, required this.onSelect});
+
+  final ThemeMode mode;
+  final ValueChanged<ThemeMode> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return SoftCard(
+      child: Row(
+        children: [
+          Expanded(
+            child: _AppearanceOption(
+              icon: Icons.brightness_auto_rounded,
+              label: 'System',
+              isSelected: mode == ThemeMode.system,
+              onTap: () => onSelect(ThemeMode.system),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: _AppearanceOption(
+              icon: Icons.light_mode_rounded,
+              label: 'Light',
+              isSelected: mode == ThemeMode.light,
+              onTap: () => onSelect(ThemeMode.light),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: _AppearanceOption(
+              icon: Icons.dark_mode_rounded,
+              label: 'Dark',
+              isSelected: mode == ThemeMode.dark,
+              onTap: () => onSelect(ThemeMode.dark),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AppearanceOption extends StatelessWidget {
+  const _AppearanceOption({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.palette;
+    return Semantics(
+      selected: isSelected,
+      button: true,
+      label: '$label theme',
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          decoration: BoxDecoration(
+            color: isSelected ? c.accentSoft : c.surfaceMuted,
+            borderRadius: BorderRadius.circular(AppSpacing.radius),
+            border: Border.all(
+              color: isSelected ? c.accent : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 24,
+                color: isSelected ? c.accent : c.textSecondary,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                label,
+                style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: isSelected ? c.textPrimary : c.textSecondary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

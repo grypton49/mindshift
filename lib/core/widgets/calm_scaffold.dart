@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../theme/app_colors.dart';
+import '../theme/app_palette.dart';
 import '../theme/app_spacing.dart';
 
 /// Shared screen chrome for the app: a calm background, an optional transparent
@@ -41,11 +41,12 @@ class CalmScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final bool hasActions = actions != null && actions!.isNotEmpty;
     final bool hasAppBar = title != null || showBack || hasActions;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: c.background,
       appBar: hasAppBar
           ? AppBar(
               backgroundColor: Colors.transparent,
@@ -56,7 +57,7 @@ class CalmScaffold extends StatelessWidget {
               leading: showBack
                   ? IconButton(
                       icon: const Icon(Icons.arrow_back_rounded),
-                      color: AppColors.textPrimary,
+                      color: c.textPrimary,
                       onPressed: () => Navigator.of(context).maybePop(),
                     )
                   : null,
@@ -67,7 +68,7 @@ class CalmScaffold extends StatelessWidget {
                       style: GoogleFonts.nunito(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: c.textPrimary,
                       ),
                     ),
               actions: hasActions ? actions : null,

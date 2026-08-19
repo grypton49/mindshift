@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/data/models/puzzle.dart';
 
@@ -91,6 +91,7 @@ class _NumberTilesSandboxState extends State<NumberTilesSandbox> {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final tiles = widget.spec.tiles;
     final poolIndices = [
       for (var i = 0; i < tiles.length; i++)
@@ -141,9 +142,9 @@ class _NumberTilesSandboxState extends State<NumberTilesSandbox> {
                 padding: const EdgeInsets.all(AppSpacing.sm),
                 child: Text(
                   'All tiles are in the tray',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
                 ),
               ),
           ],
@@ -161,11 +162,12 @@ class _SumHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _Stat(label: 'Your sum', value: '$sum', emphasized: true),
-        Container(width: 1, height: 44, color: AppColors.surfaceMuted),
+        Container(width: 1, height: 44, color: c.surfaceMuted),
         _Stat(label: 'Target', value: '$target'),
       ],
     );
@@ -185,20 +187,19 @@ class _Stat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         Text(
           label,
-          style: textTheme.labelMedium?.copyWith(
-            color: AppColors.textSecondary,
-          ),
+          style: textTheme.labelMedium?.copyWith(color: c.textSecondary),
         ),
         const SizedBox(height: AppSpacing.xs),
         AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 180),
           style: (textTheme.headlineMedium ?? const TextStyle()).copyWith(
-            color: emphasized ? AppColors.accent : AppColors.textPrimary,
+            color: emphasized ? c.accent : c.textPrimary,
             fontWeight: FontWeight.w800,
           ),
           child: Text(value),
@@ -225,6 +226,7 @@ class _TrayZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return DragTarget<int>(
@@ -238,10 +240,10 @@ class _TrayZone extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
-            color: highlighted ? AppColors.accentSoft : AppColors.surfaceMuted,
+            color: highlighted ? c.accentSoft : c.surfaceMuted,
             borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
             border: Border.all(
-              color: highlighted ? AppColors.accent : Colors.transparent,
+              color: highlighted ? c.accent : Colors.transparent,
               width: 2,
             ),
           ),
@@ -255,14 +257,14 @@ class _TrayZone extends StatelessWidget {
                   Text(
                     'Tray',
                     style: textTheme.labelLarge?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                     ),
                   ),
                   if (trayIndices.isNotEmpty)
                     TextButton(
                       onPressed: onClear,
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.textSecondary,
+                        foregroundColor: c.textSecondary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.sm,
                         ),
@@ -280,7 +282,7 @@ class _TrayZone extends StatelessWidget {
                   child: Text(
                     'Tap or drag tiles here',
                     style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                     ),
                   ),
                 )
@@ -308,11 +310,12 @@ class _TrayZone extends StatelessWidget {
 class _PoolLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return Text(
       'Tiles',
       style: Theme.of(
         context,
-      ).textTheme.labelLarge?.copyWith(color: AppColors.textSecondary),
+      ).textTheme.labelLarge?.copyWith(color: c.textSecondary),
     );
   }
 }
@@ -334,8 +337,9 @@ class _NumberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = inTray ? AppColors.accent : AppColors.surface;
-    final fg = inTray ? Colors.white : AppColors.textPrimary;
+    final c = context.palette;
+    final bg = inTray ? c.accent : c.surface;
+    final fg = inTray ? c.onAccent : c.textPrimary;
 
     final tile = Opacity(
       opacity: faded ? 0.3 : 1,
@@ -347,7 +351,7 @@ class _NumberTile extends StatelessWidget {
           color: bg,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
           border: Border.all(
-            color: inTray ? AppColors.accent : AppColors.surfaceMuted,
+            color: inTray ? c.accent : c.surfaceMuted,
             width: 1.5,
           ),
           boxShadow: dragging

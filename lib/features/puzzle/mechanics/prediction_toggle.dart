@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mindshift/core/theme/app_colors.dart';
+import 'package:mindshift/core/theme/app_palette.dart';
 import 'package:mindshift/core/theme/app_spacing.dart';
 import 'package:mindshift/data/models/puzzle.dart';
 
@@ -33,6 +33,7 @@ class PredictionToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return Column(
@@ -43,7 +44,7 @@ class PredictionToggle extends StatelessWidget {
           spec.question,
           textAlign: TextAlign.center,
           style: textTheme.titleMedium?.copyWith(
-            color: AppColors.textPrimary,
+            color: c.textPrimary,
             fontWeight: FontWeight.w700,
             height: 1.35,
           ),
@@ -78,16 +79,17 @@ class _OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     final textTheme = Theme.of(context).textTheme;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOut,
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.accentSoft : AppColors.surface,
+        color: isSelected ? c.accentSoft : c.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
         border: Border.all(
-          color: isSelected ? AppColors.accent : AppColors.surfaceMuted,
+          color: isSelected ? c.accent : c.surfaceMuted,
           width: isSelected ? 2 : 1.5,
         ),
       ),
@@ -110,7 +112,7 @@ class _OptionCard extends StatelessWidget {
                   child: Text(
                     label,
                     style: textTheme.titleMedium?.copyWith(
-                      color: AppColors.textPrimary,
+                      color: c.textPrimary,
                       fontWeight: isSelected
                           ? FontWeight.w700
                           : FontWeight.w600,
@@ -133,20 +135,21 @@ class _SelectionDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.palette;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: 24,
       height: 24,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isSelected ? AppColors.accent : Colors.transparent,
+        color: isSelected ? c.accent : Colors.transparent,
         border: Border.all(
-          color: isSelected ? AppColors.accent : AppColors.textSecondary,
+          color: isSelected ? c.accent : c.textSecondary,
           width: 2,
         ),
       ),
       child: isSelected
-          ? const Icon(Icons.check_rounded, size: 16, color: Colors.white)
+          ? Icon(Icons.check_rounded, size: 16, color: c.onAccent)
           : null,
     );
   }
