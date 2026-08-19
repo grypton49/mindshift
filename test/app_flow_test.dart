@@ -4,13 +4,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mindshift/app.dart';
 import 'package:mindshift/data/providers.dart';
+import 'package:mindshift/data/repositories/puzzle_remote_source.dart';
 
 Future<void> _pumpApp(WidgetTester tester) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        // Keep the test hermetic: no real network fetch of the remote pack.
+        puzzleRemoteSourceProvider.overrideWithValue(
+          PuzzleRemoteSource(url: '', timeout: Duration.zero),
+        ),
+      ],
       child: const MindShiftApp(),
     ),
   );
