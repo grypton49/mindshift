@@ -7,8 +7,10 @@ import 'package:mindshift/app.dart';
 import 'package:mindshift/data/providers.dart';
 import 'package:mindshift/data/repositories/puzzle_remote_source.dart';
 
-Future<void> _pumpApp(WidgetTester tester) async {
-  SharedPreferences.setMockInitialValues({});
+Future<void> _pumpApp(WidgetTester tester, {List<String> solved = const []}) async {
+  SharedPreferences.setMockInitialValues({
+    if (solved.isNotEmpty) 'mindshift.solvedIds': solved,
+  });
   final prefs = await SharedPreferences.getInstance();
   await tester.pumpWidget(
     ProviderScope(
@@ -34,9 +36,9 @@ void main() {
     'a reasoning puzzle reveals nothing pre-solve, then solves via a committed '
     'multiple-choice answer',
     (tester) async {
-      await _pumpApp(tester);
+      // Seed the two levels before it so the MC level is the playable frontier.
+      await _pumpApp(tester, solved: ['blue-eyed-islanders', 'pirates-gold']);
 
-      // An early multiple-choice level is within the opening unlock window.
       final card = find.text('The 100 Prisoners and the Boxes');
       await tester.scrollUntilVisible(
         card,

@@ -129,6 +129,17 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
       );
     }
 
+    // Every level is readable, but answering is reserved for levels you've
+    // reached (the current one + everything before it). Future levels open as a
+    // read-only preview so you can think ahead.
+    var playable = true;
+    for (final level in ref.watch(levelsProvider)) {
+      if (level.puzzle.id == puzzle.id) {
+        playable = level.unlocked;
+        break;
+      }
+    }
+
     return CalmScaffold(
       title: puzzle.title,
       showBack: true,
@@ -147,9 +158,20 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _PuzzleHeader(puzzle: puzzle),
+                  if (!playable) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    const InsightCard(
+                      icon: Icons.visibility_rounded,
+                      title: 'Preview',
+                      text:
+                          'You can read and think about this one now. Reach it '
+                          'in your journey to lock in an answer.',
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
                   SoftCard(child: _buildSandbox(puzzle.sandbox)),
-                  if (puzzle.answer case final BinaryAnswerSpec binary) ...[
+                  if (puzzle.answer case final BinaryAnswerSpec binary
+                      when playable) ...[
                     const SizedBox(height: AppSpacing.lg),
                     PredictionToggle(
                       spec: binary,
@@ -158,7 +180,8 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
                           setState(() => _selectedBinary = value),
                     ),
                   ],
-                  if (puzzle.answer case final MultipleChoiceAnswerSpec mc) ...[
+                  if (puzzle.answer case final MultipleChoiceAnswerSpec mc
+                      when playable) ...[
                     const SizedBox(height: AppSpacing.lg),
                     MultipleChoiceToggle(
                       spec: mc,
@@ -167,7 +190,8 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
                           setState(() => _selectedChoice = index),
                     ),
                   ],
-                  if (puzzle.answer case final NumberEntryAnswerSpec ne) ...[
+                  if (puzzle.answer case final NumberEntryAnswerSpec ne
+                      when playable) ...[
                     const SizedBox(height: AppSpacing.lg),
                     NumberEntryField(
                       spec: ne,
@@ -181,12 +205,13 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
               ),
             ),
           ),
-          AnswerBar(
-            canSubmit: _canSubmit(puzzle.answer),
-            solved: _solved,
-            feedbackMessage: _feedback,
-            onSubmit: () => _onSubmit(puzzle),
-          ),
+          if (playable)
+            AnswerBar(
+              canSubmit: _canSubmit(puzzle.answer),
+              solved: _solved,
+              feedbackMessage: _feedback,
+              onSubmit: () => _onSubmit(puzzle),
+            ),
         ],
       ),
     );

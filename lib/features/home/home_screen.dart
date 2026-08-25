@@ -282,24 +282,19 @@ class _LevelCard extends StatelessWidget {
         : _LevelState.open;
     final locked = state == _LevelState.locked;
 
-    // Trailing action hint, tuned to the rung's state.
-    String? actionLabel;
-    var filledAction = false;
-    switch (state) {
-      case _LevelState.locked:
-        actionLabel = null;
-      case _LevelState.current:
-        actionLabel = level.index == 0 ? 'Start' : 'Continue';
-        filledAction = true;
-      case _LevelState.solved:
-        actionLabel = 'Revisit';
-      case _LevelState.open:
-        actionLabel = 'Play';
-    }
+    // Trailing action hint, tuned to the rung's state. Locked rungs are still
+    // readable, so they invite a "Read" preview rather than nothing.
+    final (String actionLabel, bool filledAction) = switch (state) {
+      _LevelState.locked => ('Read', false),
+      _LevelState.current => (level.index == 0 ? 'Start' : 'Continue', true),
+      _LevelState.solved => ('Revisit', false),
+      _LevelState.open => ('Play', false),
+    };
 
     Widget card = SoftCard(
       color: locked ? c.surfaceMuted : c.surface,
-      onTap: locked ? null : () => context.push(Routes.puzzlePath(puzzle.id)),
+      // Every level is at least readable — open any to read and think it through.
+      onTap: () => context.push(Routes.puzzlePath(puzzle.id)),
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,10 +329,8 @@ class _LevelCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (actionLabel != null) ...[
-                const SizedBox(width: AppSpacing.sm),
-                _ActionChip(label: actionLabel, filled: filledAction),
-              ],
+              const SizedBox(width: AppSpacing.sm),
+              _ActionChip(label: actionLabel, filled: filledAction),
             ],
           ),
           const SizedBox(height: AppSpacing.md),

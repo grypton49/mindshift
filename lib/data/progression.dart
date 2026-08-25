@@ -41,23 +41,27 @@ List<Puzzle> orderPuzzles(List<Puzzle> puzzles) {
   return [for (final e in indexed) e.$2];
 }
 
-/// How many levels beyond your solved count stay open at once. With a window,
-/// a single brutal puzzle can never wall you — you can skip ahead and come back.
-const int kUnlockAhead = 3;
-
 /// Builds the level ladder from [puzzles] and the player's [solvedIds].
 ///
-/// LENIENT unlock rule (deliberately robust to pack changes / refetches):
-///   - a rolling window is always open: level `i` is unlocked when
-///     `i <= solvedCount + kUnlockAhead` (so ~[kUnlockAhead]+1 are playable and
-///     you may SKIP a fiendish one and try the next);
-///   - a level that is ALREADY solved stays unlocked no matter what.
-/// Because it keys off stable puzzle ids (not fixed positions), solving state is
-/// never lost when the remote pack reorders or adds puzzles.
+/// EVERY level is readable (the UI lets you open any rung to read and think it
+/// through). `unlocked` here means PLAYABLE — i.e. you may commit an answer:
+///   - the current rung (the first unsolved level) plus everything before it is
+///     playable, so any earlier level stays replayable;
+///   - later levels open as a read-only PREVIEW until you reach them.
+/// Keyed off stable puzzle ids (not fixed positions), so solving state is never
+/// lost when the remote pack reorders or adds puzzles.
 List<PuzzleLevel> buildLevels(List<Puzzle> puzzles, Set<String> solvedIds) {
   final ordered = orderPuzzles(puzzles);
-  final solvedCount =
-      ordered.where((p) => solvedIds.contains(p.id)).length;
+
+  // Frontier = the first unsolved level; that rung (and all before it) is playable.
+  var frontier = ordered.length;
+  for (var i = 0; i < ordered.length; i++) {
+    if (!solvedIds.contains(ordered[i].id)) {
+      frontier = i;
+      break;
+    }
+  }
+
   final levels = <PuzzleLevel>[];
   for (var i = 0; i < ordered.length; i++) {
     final solved = solvedIds.contains(ordered[i].id);
@@ -65,7 +69,7 @@ List<PuzzleLevel> buildLevels(List<Puzzle> puzzles, Set<String> solvedIds) {
       puzzle: ordered[i],
       index: i,
       solved: solved,
-      unlocked: solved || i <= solvedCount + kUnlockAhead,
+      unlocked: solved || i <= frontier,
     ));
   }
   return levels;
