@@ -12,9 +12,12 @@ import 'package:mindshift/data/models/puzzle_category.dart';
 import 'package:mindshift/data/providers.dart';
 import 'package:mindshift/features/puzzle/mechanics/answer_bar.dart';
 import 'package:mindshift/features/puzzle/mechanics/lever_sandbox.dart';
+import 'package:mindshift/features/puzzle/mechanics/multiple_choice.dart';
 import 'package:mindshift/features/puzzle/mechanics/nim_sandbox.dart';
+import 'package:mindshift/features/puzzle/mechanics/number_entry.dart';
 import 'package:mindshift/features/puzzle/mechanics/number_tiles_sandbox.dart';
 import 'package:mindshift/features/puzzle/mechanics/prediction_toggle.dart';
+import 'package:mindshift/features/puzzle/mechanics/reasoning_sandbox.dart';
 import 'package:mindshift/features/puzzle/mechanics/tigers_sandbox.dart';
 import 'package:mindshift/features/puzzle/mechanics/why_card.dart';
 
@@ -54,6 +57,12 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
   /// first.
   bool? _reportedBool;
 
+  /// NumberEntryAnswerSpec: the whole number the player typed, null until entered.
+  int? _enteredNumber;
+
+  /// MultipleChoiceAnswerSpec: the option index the player tapped, null = none.
+  int? _selectedChoice;
+
   // ---- Screen state ----------------------------------------------------------
   /// How many hints the player has chosen to reveal (never auto-shown).
   int _revealedHints = 0;
@@ -82,12 +91,16 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
     BinaryAnswerSpec() => _selectedBinary,
     ReachTargetAnswerSpec() => _reportedInt,
     GoalAnswerSpec() => _reportedBool,
+    NumberEntryAnswerSpec() => _enteredNumber,
+    MultipleChoiceAnswerSpec() => _selectedChoice,
   };
 
   bool _canSubmit(AnswerSpec spec) => switch (spec) {
     BinaryAnswerSpec() => _selectedBinary != null,
     ReachTargetAnswerSpec() => _reportedInt != null,
     GoalAnswerSpec() => _reportedBool != null,
+    NumberEntryAnswerSpec() => _enteredNumber != null,
+    MultipleChoiceAnswerSpec() => _selectedChoice != null,
   };
 
   void _onSubmit(Puzzle puzzle) {
@@ -145,6 +158,23 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
                           setState(() => _selectedBinary = value),
                     ),
                   ],
+                  if (puzzle.answer case final MultipleChoiceAnswerSpec mc) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    MultipleChoiceToggle(
+                      spec: mc,
+                      selected: _selectedChoice,
+                      onSelected: (index) =>
+                          setState(() => _selectedChoice = index),
+                    ),
+                  ],
+                  if (puzzle.answer case final NumberEntryAnswerSpec ne) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    NumberEntryField(
+                      spec: ne,
+                      onChanged: (value) =>
+                          setState(() => _enteredNumber = value),
+                    ),
+                  ],
                   ..._buildHints(puzzle),
                   ..._buildWhy(puzzle),
                 ],
@@ -177,6 +207,7 @@ class _PuzzleHostScreenState extends ConsumerState<PuzzleHostScreen> {
       onAnswerChanged: (balanced) => setState(() => _reportedBool = balanced),
     ),
     NimSandboxSpec() => NimSandbox(spec: spec),
+    ReasoningSandboxSpec() => ReasoningSandbox(spec: spec),
   };
 
   /// Opt-in, one-at-a-time hints. Never auto-shown; the reveal button hides once

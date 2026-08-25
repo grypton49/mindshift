@@ -139,6 +139,18 @@ class NimSandboxSpec extends SandboxSpec {
   final bool lastTakeWins;
 }
 
+/// The "sandbox" for pure-reasoning puzzles that have no interactive experiment:
+/// a calm panel plus a PRIVATE scratchpad (the player's own working — never
+/// validated, scored, or persisted). The thinking is entirely the human's; the
+/// app supplies no tool that does any of the reasoning.
+class ReasoningSandboxSpec extends SandboxSpec {
+  const ReasoningSandboxSpec({this.note});
+
+  /// Optional gentle framing shown above the scratchpad (never a hint at the
+  /// method or answer).
+  final String? note;
+}
+
 /// ============================================================================
 /// AnswerSpec — how the player commits a conclusion + a PURE correctness check.
 ///
@@ -149,6 +161,10 @@ class NimSandboxSpec extends SandboxSpec {
 ///     reports its current value via `onAnswerChanged` (int). isCorrect gets that int.
 ///   - [GoalAnswerSpec] -> the sandbox reports whether the goal is met via
 ///     `onAnswerChanged` (bool). isCorrect gets that bool.
+///   - [NumberEntryAnswerSpec] -> the player types a number; the host reports an
+///     int. isCorrect gets that int.
+///   - [MultipleChoiceAnswerSpec] -> the player taps one option; the host reports
+///     its index. isCorrect gets that int index.
 ///
 /// Feedback is confirm / gentle try-again only. isCorrect never surfaces the
 /// answer itself to the UI.
@@ -204,4 +220,36 @@ class GoalAnswerSpec extends AnswerSpec {
 
   @override
   bool isCorrect(Object? answer) => answer == true;
+}
+
+/// The player types an exact whole-number answer (e.g. "how many drops?", "which
+/// seat?"). [unit] is an optional label shown by the field (e.g. "nights",
+/// "moves"). The answer is committed via the AnswerBar, not auto-checked.
+class NumberEntryAnswerSpec extends AnswerSpec {
+  const NumberEntryAnswerSpec({required this.answer, this.unit});
+
+  final int answer;
+  final String? unit;
+
+  @override
+  bool isCorrect(Object? value) => value is int && value == answer;
+}
+
+/// The player commits by choosing one of [options]; [correctIndex] is the right
+/// one. Use for "which/what" answers, probability fractions, and counterintuitive
+/// physics (rises / falls / stays the same). The UI never marks which is correct.
+class MultipleChoiceAnswerSpec extends AnswerSpec {
+  const MultipleChoiceAnswerSpec({
+    required this.question,
+    required this.options,
+    required this.correctIndex,
+  });
+
+  /// The prompt shown above the options, e.g. "Does the water level…".
+  final String question;
+  final List<String> options;
+  final int correctIndex;
+
+  @override
+  bool isCorrect(Object? value) => value is int && value == correctIndex;
 }

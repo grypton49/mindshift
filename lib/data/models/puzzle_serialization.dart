@@ -40,6 +40,10 @@ Map<String, dynamic> sandboxSpecToJson(SandboxSpec spec) {
         'maxTake': s.maxTake,
         'lastTakeWins': s.lastTakeWins,
       },
+    ReasoningSandboxSpec s => {
+        'type': 'reasoning',
+        if (s.note != null) 'note': s.note,
+      },
   };
 }
 
@@ -70,6 +74,10 @@ SandboxSpec? sandboxSpecFromJson(Map<String, dynamic> json) {
         maxTake: _int(json['maxTake'], 3),
         lastTakeWins: json['lastTakeWins'] != false,
       );
+    case 'reasoning':
+      return ReasoningSandboxSpec(
+        note: json['note'] is String ? json['note'] as String : null,
+      );
     default:
       return null;
   }
@@ -96,6 +104,17 @@ Map<String, dynamic> answerSpecToJson(AnswerSpec spec) {
         'type': 'goal',
         'goalLabel': a.goalLabel,
       },
+    NumberEntryAnswerSpec a => {
+        'type': 'numberEntry',
+        'answer': a.answer,
+        if (a.unit != null) 'unit': a.unit,
+      },
+    MultipleChoiceAnswerSpec a => {
+        'type': 'multipleChoice',
+        'question': a.question,
+        'options': a.options,
+        'correctIndex': a.correctIndex,
+      },
   };
 }
 
@@ -113,6 +132,19 @@ AnswerSpec? answerSpecFromJson(Map<String, dynamic> json) {
       return ReachTargetAnswerSpec(target: _int(json['target'], 0));
     case 'goal':
       return GoalAnswerSpec(goalLabel: _str(json['goalLabel']));
+    case 'numberEntry':
+      return NumberEntryAnswerSpec(
+        answer: _int(json['answer'], 0),
+        unit: json['unit'] is String ? json['unit'] as String : null,
+      );
+    case 'multipleChoice':
+      final options = _strList(json['options']);
+      if (options.isEmpty) return null;
+      return MultipleChoiceAnswerSpec(
+        question: _str(json['question']),
+        options: options,
+        correctIndex: _int(json['correctIndex'], 0),
+      );
     default:
       return null;
   }

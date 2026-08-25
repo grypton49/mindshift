@@ -1,246 +1,1450 @@
 {
-  "version": 2,
+  "version": 3,
   "puzzles": [
     {
-      "id": "make-the-target",
-      "title": "Make the Target",
-      "tagline": "Pick the right tiles to land exactly on the number.",
-      "category": "math",
-      "difficulty": 1,
-      "prompt": "You have a handful of number tiles. Add some of them together so the total lands exactly on the target. Each tile can be used at most once.",
-      "rules": [
-        "Tap a tile to move it in or out of the tray.",
-        "The running total updates as you go — reach the target exactly."
-      ],
-      "sandbox": {
-        "type": "numberTiles",
-        "tiles": [
-          2,
-          3,
-          5,
-          7,
-          9
-        ],
-        "target": 17
-      },
-      "answer": {
-        "type": "reachTarget",
-        "target": 17
-      },
-      "hints": [
-        "Which single tile gets you closest to 17 without going over?",
-        "If you start from the largest tile, how much is left to make up?"
-      ],
-      "whyExplanation": "Reaching an exact total is a small taste of the \"subset sum\" problem: from a set of numbers, find a group that adds to a goal. Here, 3 + 5 + 9 = 17. With only a few tiles you can reason it out by hand; with hundreds, it becomes one of computer science's famously hard problems.",
-      "comingSoon": false
-    },
-    {
-      "id": "will-it-balance",
-      "title": "Will It Balance?",
-      "tagline": "Slide the weight to find the balance point.",
-      "category": "physics",
-      "difficulty": 2,
-      "prompt": "A weight sits on the left of a balance beam. Slide the weight on the right until the beam settles level.",
-      "rules": [
-        "Drag the right-hand weight along the beam to change its distance.",
-        "The beam tips according to real weight and distance — feel your way to level."
-      ],
-      "sandbox": {
-        "type": "lever",
-        "leftWeight": 4.0,
-        "leftDistance": 3.0,
-        "rightWeight": 3.0,
-        "maxDistance": 5.0
-      },
-      "answer": {
-        "type": "goal",
-        "goalLabel": "Balance the beam"
-      },
-      "hints": [
-        "What makes one side dip — is it the weight, the distance, or both together?",
-        "The left side is heavier but closer in. How could a lighter weight match it?"
-      ],
-      "whyExplanation": "A beam balances when the turning effect (torque) is equal on both sides, and torque = weight x distance from the pivot. The left gives 4 x 3 = 12, so the lighter right weight of 3 must sit at distance 4 (3 x 4 = 12). A smaller weight can balance a larger one simply by sitting farther out.",
-      "comingSoon": false
-    },
-    {
-      "id": "tigers-and-sheep",
-      "title": "Tigers & Sheep",
-      "tagline": "100 hungry, flawless logicians and one very nervous sheep.",
+      "id": "blue-eyed-islanders",
+      "title": "The Blue-Eyed Islanders",
+      "tagline": "A single spoken sentence sets a silent clock ticking.",
       "category": "gameTheory",
-      "difficulty": 3,
-      "prompt": "On an island live 100 tigers and 1 sheep. Any tiger may eat the sheep — but the moment a tiger eats it, that tiger turns into a sheep, and can then be eaten by another tiger.\n\nEvery tiger is perfectly logical and, above all else, wants to stay alive. No tiger will make a move that gets itself eaten.\n\nWith 100 tigers, does the sheep get eaten, or is it safe?",
+      "difficulty": 5,
+      "prompt": "An island holds 200 perfect logicians: 100 have blue eyes and 100 have brown eyes. Each person can see everyone else's eyes but never their own — there are no mirrors, no reflections, and absolutely no communication about eye colour of any kind. There is one iron rule: the instant anyone works out their own eye colour, they must leave the island that very midnight, and everyone sees who has left. One day a visitor stands before all 200 and says aloud, \"At least one of you has blue eyes.\" Everyone hears it. On which night do all the blue-eyed islanders finally leave?",
       "rules": [
-        "Any tiger may eat the sheep — but eating it turns the eater into a sheep.",
-        "A newly-made sheep can then be eaten by any remaining tiger.",
-        "Every tiger is perfectly logical and reasons flawlessly.",
-        "Above all, each tiger wants to survive; it never makes a move that leaves it exposed to being eaten."
+        "Every islander is a flawless logician and reasons about what others can and cannot deduce.",
+        "Nobody may hint at, gesture about, or discuss anyone's eye colour.",
+        "A person leaves only on a midnight after which they have logically proven their own colour — never on a guess.",
+        "Count the first midnight after the announcement as night 1."
       ],
       "sandbox": {
-        "type": "tigers",
-        "minTigers": 1,
-        "maxTigers": 12,
-        "questionTigers": 100
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 100,
+        "unit": "nights"
+      },
+      "hints": [
+        "What would happen if there were only 1 blue-eyed person? On which night would they leave, and why does the announcement matter to them?",
+        "Now suppose there were exactly 2 blue-eyed people. What does each one expect the other to do on night 1, and what does surviving that night tell them?",
+        "If the pattern holds for 2, then 3, then 4… how does the leaving night relate to the number of blue-eyed people?"
+      ],
+      "whyExplanation": "Reason by induction on the number of blue-eyed people. If there were just 1, that person would see no other blue eyes; the announcement (\"at least one\") tells them it must be their own, so they leave on night 1. If there were 2, each sees exactly 1 other blue-eyed person and reasons: \"If I am not blue, that other person is the only one and will leave on night 1.\" When night 1 passes with no departure, each learns they too must be blue, so both leave on night 2. The same logic extends: with k blue-eyed people, each sees k−1 others and expects them to leave on night k−1; when that night passes without anyone leaving, all k realise their own eyes are blue and leave together on night k. With 100 blue-eyed islanders, that is night 100.",
+      "comingSoon": false
+    },
+    {
+      "id": "pirates-gold",
+      "title": "The Pirates and the Gold",
+      "tagline": "The most senior pirate is far greedier than he looks.",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "Five perfectly rational, perfectly greedy pirates — ranked 1 (most senior) down to 5 (most junior) — must divide 100 gold coins. The most senior surviving pirate proposes how to split the coins, then every pirate still alive (including the proposer) votes yes or no. If at least half vote yes, the split happens and the game ends. If fewer than half vote yes, the proposer is thrown overboard and the next most senior pirate makes a new proposal, and so on. Every pirate wants, in strict priority order, first to gain as much gold as possible, then to stay alive, and finally — all else equal — to see other pirates thrown overboard. Assuming everyone reasons flawlessly, how many coins does the most senior pirate keep for himself?",
+      "rules": [
+        "A proposal passes when yes-votes are at least half of the pirates still alive (a tie counts as passing).",
+        "Preferences in strict order: more gold first, then survival, then seeing others die.",
+        "Every pirate knows every other pirate reasons perfectly, and coins are indivisible whole units."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 98,
+        "unit": "coins"
+      },
+      "hints": [
+        "What happens if only the two most junior pirates remain? How must the more senior of the two vote to survive, and why?",
+        "Work backwards: once you know the outcome with 2 pirates, what is the cheapest way a proposer with 3 can buy exactly the votes he needs?",
+        "To pass a proposal, whose single vote is cheapest to win — someone who would get nothing if this proposer were thrown overboard?"
+      ],
+      "whyExplanation": "Solve by backward induction. With only pirates 4 and 5 left, pirate 4 proposes to keep all 100 (his own vote is half of two, so it passes); pirate 5 gets nothing. So pirate 5 dreads reaching that stage. With pirates 3, 4, 5, pirate 3 needs just one other vote: he offers pirate 5 a single coin (better than the zero pirate 5 would get if 3 dies), keeping 99 (pirate 4 gets nothing). With pirates 2–5, pirate 2 needs just one vote besides his own — he buys pirate 4 with a single coin (pirate 4 would get 0 if pirate 3 ends up proposing), keeping 99. Finally, with all five, pirate 1 needs two extra votes; he gives 1 coin each to pirates 3 and 5 (who would otherwise get nothing under pirate 2's plan), and they accept. Pirate 1 keeps 98 coins.",
+      "comingSoon": false
+    },
+    {
+      "id": "prisoners-boxes",
+      "title": "The 100 Prisoners and the Boxes",
+      "tagline": "A hopeless-looking gamble has a startlingly good strategy.",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "A hundred prisoners are numbered 1 to 100. In a room sit 100 identical boxes, and inside each box is a slip bearing one of the numbers 1 to 100 — every number appears exactly once, placed at random. One at a time, each prisoner enters the room alone and may open at most 50 boxes, looking for the slip that carries their own number. Boxes are left exactly as found and no messages can be passed between prisoners. Every single prisoner must find their own number, or all 100 are executed. The prisoners may agree on a plan beforehand. With the best possible strategy, what is the chance all 100 prisoners go free?",
+      "rules": [
+        "Each prisoner opens at most 50 of the 100 boxes and cannot rearrange or mark anything.",
+        "Prisoners cannot communicate once the searching begins.",
+        "They all go free only if every prisoner finds their own number."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "With the best possible strategy, what is the chance all 100 prisoners go free?",
+        "options": [
+          "About 31%",
+          "About 50%",
+          "About one in a million",
+          "Essentially zero (½ to the 100th)"
+        ],
+        "correctIndex": 0
+      },
+      "hints": [
+        "If each prisoner just opened 50 boxes at random, the odds would be ½ to the 100th power. What structure could link the prisoners' searches so their fates rise and fall together instead of independently?",
+        "What if a prisoner starts at the box matching their own number, then goes to the box whose label equals the slip they just found, and repeats? What kind of path does that trace through the boxes?",
+        "Under that following strategy, the only way a prisoner fails is if their path is too long. What single property of the random arrangement decides whether everyone succeeds?"
+      ],
+      "whyExplanation": "The arrangement of slips is a random permutation, which decomposes into cycles. If each prisoner starts at the box matching their own number and then follows the chain — open box labelled with the number you last found, repeat — each prisoner walks the cycle that contains their own number and is guaranteed to reach their slip in exactly the length of that cycle. So a prisoner fails only if their cycle is longer than 50. Crucially, a permutation of 100 elements can contain at most one cycle longer than 50, so either everyone succeeds or they all fail for the same reason. The probability that some cycle exceeds length 50 is 1/51 + 1/52 + … + 1/100 ≈ 0.688, so the prisoners all go free with probability 1 − 0.688 ≈ 0.312, about 31%.",
+      "comingSoon": false
+    },
+    {
+      "id": "prisoners-lightbulb",
+      "title": "The Prisoners and the Lightbulb",
+      "tagline": "One switch, one room, and a plan that must never fail.",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "A hundred prisoners are held in separate cells. There is one central room containing a single light with an on/off switch. One at a time, in a completely random order chosen by the warden, prisoners are taken into the room; a prisoner may toggle the light or leave it, then is returned to their cell. This continues indefinitely, and every prisoner is guaranteed to visit the room again and again without limit. At any visit, a prisoner may declare, \"Every prisoner has now visited this room.\" If the declaration is true, all are freed; if it is false, all are executed. The prisoners can agree on a strategy beforehand but cannot communicate afterwards except through the light, and they do not know the light's starting state. Can they guarantee that they will all eventually be freed?",
+      "rules": [
+        "The order of visits is arbitrary, but each prisoner visits infinitely often.",
+        "The only shared signal after the start is the state of the single light.",
+        "A wrong declaration kills everyone, so the plan must be certain, not likely."
+      ],
+      "sandbox": {
+        "type": "reasoning"
       },
       "answer": {
         "type": "binary",
-        "question": "With 100 tigers, is the sheep…",
-        "optionA": "Safe",
-        "optionB": "Eaten",
+        "question": "Can they guarantee that they will all eventually be freed?",
+        "optionA": "Yes",
+        "optionB": "No",
         "correctIsA": true
       },
       "hints": [
-        "What happens with just 1 tiger? Then try 2. What changed?",
-        "When a tiger decides whether to eat, what does it need to be true about the world it wakes up in afterwards?",
-        "After a tiger eats, how many tigers are left facing the new sheep?",
-        "Line up the cases from small to large. What splits the safe outcomes from the eaten ones?"
+        "The light carries only one bit at a time. Would it help to give the prisoners unequal roles rather than treating them all the same?",
+        "Suppose exactly one prisoner is allowed to turn the light off and counts each time they do. What must the other 99 prisoners do so that each off-turn represents a distinct newcomer?",
+        "How can you protect against not knowing the light's starting state, so the counter never counts the same person twice or is fooled by the initial setting?"
       ],
-      "whyExplanation": "Think about it from the smallest case up.\n\nWith 1 tiger, there is nothing to fear: that tiger eats the sheep and stays safe, because no other tiger is left to eat it. So 1 tiger → the sheep is eaten.\n\nWith 2 tigers, each tiger thinks: \"If I eat the sheep, I become a sheep — and then the other tiger is exactly in the 1-tiger situation, where eating is safe. It would eat me.\" So neither dares. 2 tigers → the sheep is safe.\n\nWith 3 tigers, a tiger reasons: \"If I eat, I become the sheep in a 2-tiger world — and we just saw the sheep is safe there. So I would survive.\" One of them eats. 3 tigers → eaten.\n\nThe pattern chains all the way up: a tiger eats only if, after it becomes the sheep, the remaining tigers form a \"sheep is safe\" situation. That flips with every added tiger. So the sheep is eaten when the number of tigers is ODD, and safe when it is EVEN.\n\n100 is even — so the sheep is safe. All 100 tigers, each perfectly logical, hold back, because each knows that eating would only hand itself to the next tiger in line.",
+      "whyExplanation": "Yes. Beforehand they appoint one prisoner as the \"counter.\" Every other prisoner follows this rule: the first two times they enter and find the light on, they turn it off; otherwise they leave it alone. (Using two turn-offs per person handles not knowing the initial state.) The counter, and only the counter, turns the light on whenever they find it off, adding one to a private tally each time. Because every non-counter turns the light off a fixed total number of times and each such off is switched back on and counted exactly once by the counter, the tally rises by exactly the intended amount only after each of the other 99 prisoners has visited. When the counter's tally reaches the agreed total (2 × 99 = 198 off-turns), they know every prisoner has been in the room and can safely declare it. Since each prisoner visits infinitely often, this count is reached with certainty.",
       "comingSoon": false
     },
     {
-      "id": "make-the-target-2",
-      "title": "Make the Target II",
-      "tagline": "A trickier total — more tiles, fewer obvious paths.",
-      "category": "math",
-      "difficulty": 3,
-      "prompt": "Add some of the tiles so the total lands exactly on the target. Each tile can be used at most once.",
-      "rules": [
-        "Tap a tile to move it in or out of the tray.",
-        "The running total updates as you go — reach the target exactly."
-      ],
-      "sandbox": {
-        "type": "numberTiles",
-        "tiles": [
-          4,
-          6,
-          9,
-          13,
-          17
-        ],
-        "target": 30
-      },
-      "answer": {
-        "type": "reachTarget",
-        "target": 30
-      },
-      "hints": [
-        "Which pair of the larger tiles gets you close?",
-        "If you commit to the biggest tile, what exact amount is left to make?"
-      ],
-      "whyExplanation": "One clean route is 13 + 17 = 30; another is 4 + 9 + 17 = 30. As the set grows, the number of possible combinations explodes — which is exactly why \"subset sum\" is hard for computers at scale, even though a few tiles are easy for a person to eyeball.",
-      "comingSoon": false
-    },
-    {
-      "id": "will-it-balance-2",
-      "title": "Balance II",
-      "tagline": "Heavier on the left — how far out must the light weight go?",
-      "category": "physics",
-      "difficulty": 4,
-      "prompt": "A heavier weight sits close to the pivot on the left. Slide the lighter weight on the right until the beam settles level.",
-      "rules": [
-        "Drag the right-hand weight along the beam to change its distance.",
-        "The beam tips according to real weight and distance — feel your way to level."
-      ],
-      "sandbox": {
-        "type": "lever",
-        "leftWeight": 5.0,
-        "leftDistance": 3.0,
-        "rightWeight": 3.0,
-        "maxDistance": 6.0
-      },
-      "answer": {
-        "type": "goal",
-        "goalLabel": "Balance the beam"
-      },
-      "hints": [
-        "The left turning effect is weight times distance. What number is that?",
-        "The right weight is smaller — so its distance has to be correspondingly larger."
-      ],
-      "whyExplanation": "Torque = weight x distance. The left side is 5 x 3 = 15, so the right weight of 3 must sit at distance 5 (3 x 5 = 15). The lighter the weight, the farther out it must go to match.",
-      "comingSoon": false
-    },
-    {
-      "id": "tigers-and-sheep-99",
-      "title": "Tigers & Sheep: 99",
-      "tagline": "Same island, one fewer tiger. Does the answer flip?",
+      "id": "guess-two-thirds",
+      "title": "Two-Thirds of the Average",
+      "tagline": "When everyone out-thinks everyone, where does it end?",
       "category": "gameTheory",
-      "difficulty": 4,
-      "prompt": "Same rules as before — a tiger that eats the sheep becomes a sheep, and every tiger is perfectly logical and wants to survive.\n\nThis time there are 99 tigers. Is the sheep safe, or eaten?",
+      "difficulty": 5,
+      "prompt": "A large group of players each secretly writes down a real number between 0 and 100, inclusive. Once every choice is in, the average of all the numbers is computed, and the winner is whoever chose the number closest to exactly two-thirds of that average. Every player is perfectly rational, and it is common knowledge that all players are perfectly rational — each knows the others are reasoning just as carefully as they are. If you want to guarantee you are playing the uniquely rational choice, what number should you write down?",
       "rules": [
-        "Any tiger may eat the sheep — but eating it turns the eater into a sheep.",
-        "A newly-made sheep can then be eaten by any remaining tiger.",
-        "Every tiger reasons flawlessly and, above all, wants to survive."
+        "Choices are made simultaneously and in secret; you cannot react to others.",
+        "The target is two-thirds of the average of everyone's numbers.",
+        "Every player is rational, and everyone knows everyone is rational, without limit."
       ],
       "sandbox": {
-        "type": "tigers",
-        "minTigers": 1,
-        "maxTigers": 12,
-        "questionTigers": 99
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 0
+      },
+      "hints": [
+        "The average can be at most 100, so two-thirds of it can be at most about 67. Can it ever be rational to pick a number above that ceiling?",
+        "If no rational player would ever pick above 67, what new ceiling does that impose on the target — and then on the next round of reasoning?",
+        "Keep applying that step. Where is the only number that survives the reasoning no matter how many times you repeat it?"
+      ],
+      "whyExplanation": "Use iterated elimination of dominated strategies. The average is at most 100, so the target (two-thirds of the average) is at most about 66.7 — any number above that can never win, so no rational player picks above it. But if everyone reasons that way, all choices lie below 66.7, making the target at most about 44.4; that eliminates everything above 44.4, and so on. Each round multiplies the ceiling by two-thirds, and repeated indefinitely by perfectly rational players who know everyone reasons this way, the only number that survives — the unique Nash equilibrium — is 0. If everyone picks 0, the target is 0, and no one can do better by deviating.",
+      "comingSoon": false
+    },
+    {
+      "id": "josephus",
+      "title": "The Circle of 100",
+      "tagline": "Every second person falls. Where do you want to stand?",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "One hundred people stand in a circle, numbered 1 to 100 in order. The counting begins at person 1, and every second person is eliminated: person 2 goes first, then 4, then 6, and so on around the circle. The counting keeps going round and round — skipping those already gone — always removing every second remaining person, until just one person is left standing. Which numbered position is the sole survivor?",
+      "rules": [
+        "The circle is counted continuously; after 100 the count wraps back to the lowest remaining number.",
+        "Exactly every second remaining person is removed, starting by removing person 2.",
+        "The process ends when only one person remains."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 73
+      },
+      "hints": [
+        "Try tiny circles first. Where does the survivor land when the group size is exactly a power of two, such as 2, 4, or 8?",
+        "For sizes that are a power of two, the survivor is always position 1. How might you write 100 as a power of two plus a remainder?",
+        "If 100 = 64 + 36, how far past position 1 does that leftover of 36 push the survivor, given people are removed two at a time?"
+      ],
+      "whyExplanation": "This is the Josephus problem with every second person eliminated. When the number of people is exactly a power of two, the survivor is always position 1, because the first full pass removes all even positions and leaves the counting poised to start again cleanly at 1. For a general count n, write n = 2^m + L, where 2^m is the largest power of two not exceeding n and L is the remainder. The survivor is then 2L + 1. Here n = 100 = 64 + 36, so 2^m = 64 and L = 36, giving 2 × 36 + 1 = 73. Position 73 is the sole survivor.",
+      "comingSoon": false
+    },
+    {
+      "id": "two-generals",
+      "title": "The Two Generals",
+      "tagline": "Two armies, one plan, and a valley full of doubt.",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "Two allied generals have their armies camped on opposite hills, with an enemy city in the valley between them. They can defeat the enemy only if both armies attack at exactly the same time; if just one attacks alone, that army is destroyed. The generals can coordinate only by sending messengers who must cross the valley, where any messenger may be captured, so any message might simply never arrive. A general can send as many messengers as they like, including messengers confirming that a message was received, and confirming the confirmation, and so on. Working only through this unreliable channel, can they GUARANTEE a coordinated attack?",
+      "rules": [
+        "Victory requires both armies to attack at the same agreed time; a solo attack fails.",
+        "Every messenger, including any acknowledgement, may be lost with no warning.",
+        "A general commits to attack only if certain the other will attack too."
+      ],
+      "sandbox": {
+        "type": "reasoning"
       },
       "answer": {
         "type": "binary",
-        "question": "With 99 tigers, is the sheep…",
-        "optionA": "Safe",
-        "optionB": "Eaten",
+        "question": "Can they GUARANTEE a coordinated attack?",
+        "optionA": "Yes",
+        "optionB": "No",
         "correctIsA": false
       },
       "hints": [
-        "You found the rule for 100. What was it about the number that mattered?",
-        "Is 99 the same kind of number as 100, or the opposite?"
+        "Suppose one general sends \"attack at dawn.\" Before committing, why would they wait for confirmation that the message arrived?",
+        "When that confirmation is sent back, does its sender now face exactly the same uncertainty the first general just faced? Who needs to confirm the confirmation?",
+        "Does adding one more acknowledgement ever remove the doubt of the last sender, or does it just move the doubt to someone new — forever?"
       ],
-      "whyExplanation": "The sheep is safe exactly when the number of tigers is even, because each tiger only eats if doing so leaves the remaining tigers in a \"sheep is safe\" position. 99 is odd — so one tiger safely eats, and the sheep is eaten. Dropping a single tiger flips the outcome.",
+      "whyExplanation": "No — coordination cannot be guaranteed, and this is provably impossible. Suppose some finite sequence of messages would let both generals safely attack. Consider the very last message that must arrive for the plan to work. Its sender cannot know whether it was received, so they cannot rely on it — meaning that last message was not actually needed, contradicting the assumption that it was the last required one. Removing it and repeating the argument eliminates every message, which is absurd. The deep reason is that a coordinated attack requires common knowledge (each knows the other will attack, and each knows that the other knows, without end), but an unreliable channel can never build that infinite tower of certainty in finitely many messages. So no protocol can guarantee a coordinated attack.",
       "comingSoon": false
     },
     {
-      "id": "make-the-target-3",
-      "title": "Make the Target III",
-      "tagline": "Six tiles, one exact total. Find the trio.",
-      "category": "math",
+      "id": "knights-knaves",
+      "title": "Knights and Knaves",
+      "tagline": "Truth-tellers and liars, and one sentence that gives it away.",
+      "category": "lateral",
       "difficulty": 5,
-      "prompt": "Add some of the tiles so the total lands exactly on the target. Each tile can be used at most once.",
+      "prompt": "On a certain island, every inhabitant is either a knight, who always tells the truth, or a knave, who always lies. You meet three of them, called A, B, and C. A declares, \"All three of us are knaves.\" B declares, \"Exactly one of us is a knight.\" C says nothing at all. Using only these statements, who is the knight?",
       "rules": [
-        "Tap a tile to move it in or out of the tray.",
-        "The running total updates as you go — reach the target exactly."
+        "Each person is either a knight (always truthful) or a knave (always lying).",
+        "A knight's statement must be entirely true; a knave's statement must be entirely false.",
+        "Reason only from the two statements given; C stays silent."
       ],
       "sandbox": {
-        "type": "numberTiles",
-        "tiles": [
-          3,
-          7,
-          12,
-          19,
-          26,
-          34
-        ],
-        "target": 52
+        "type": "reasoning"
       },
       "answer": {
-        "type": "reachTarget",
-        "target": 52
+        "type": "multipleChoice",
+        "question": "Who is the knight?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "It cannot be determined"
+        ],
+        "correctIndex": 1
       },
       "hints": [
-        "Is the target closer to two big tiles or three medium ones?",
-        "Try fixing the largest tile you might use, then solve what remains."
+        "Start with A's claim. Could a knight ever truthfully say \"all three of us are knaves\"? What does that force A to be?",
+        "Once you fix what A must be, count the knights that implies and check it against B's statement. Is B's claim then true or false?",
+        "Test each remaining possibility for B and C against both statements. Which single assignment leaves no contradiction?"
       ],
-      "whyExplanation": "For example 7 + 19 + 26 = 52. With six tiles there are dozens of subsets to consider — a person prunes them with intuition, but a computer may have to check exponentially many. That gap is the whole point of the puzzle.",
+      "whyExplanation": "First examine A. If A were a knight, then A's statement \"all three of us are knaves\" would have to be true — but that would make A a knave, a contradiction. So A cannot be a knight; A is a knave, and A's statement is therefore false (so it is not the case that all three are knaves — at least one is a knight). Now consider B's claim, \"exactly one of us is a knight.\" Since A is a knave, the knight(s) are among B and C. If B were a knave, B's statement would be false, so the number of knights would not be exactly one; but with A a knave that would force both B and C to be knaves, meaning zero knights — contradicting that at least one is a knight. So B must be a knight, B's statement is true, exactly one of the three is a knight, and that one is B (with A and C both knaves). The knight is B.",
       "comingSoon": false
     },
     {
-      "id": "last-stone",
-      "title": "The Last Stone",
-      "tagline": "Take 1–3 stones, alternate turns. Can you always win?",
+      "id": "line-of-hats",
+      "title": "The Line of 100 Hats",
+      "tagline": "One person gambles so the other ninety-nine never have to.",
       "category": "gameTheory",
       "difficulty": 5,
-      "prompt": "There are 13 stones. You and your opponent take turns removing 1, 2, or 3 stones. You go first. Whoever takes the very last stone wins.\n\nPlaying perfectly against a perfect opponent, can the first player always force a win?",
+      "prompt": "A hundred prisoners are made to stand in a single line. Each is given a hat that is either red or blue, assigned however the warden likes. Every prisoner can see the hats of all the people standing in front of them, but not their own hat and none of the hats behind them. Starting from the very back of the line, each prisoner in turn must call out a single word, \"red\" or \"blue,\" and this call is heard by everyone. A prisoner is freed if the colour they call matches their own hat, and the calls carry no hidden meaning beyond the colour word itself. The prisoners agree on a strategy in advance. Using the best possible plan, how many prisoners can they GUARANTEE to save?",
       "rules": [
-        "On your turn, remove 1, 2, or 3 stones.",
-        "You move first; the opponent then plays perfectly.",
-        "Taking the last stone wins the game."
+        "Each prisoner sees every hat in front of them but never their own or any behind.",
+        "Calls happen from the back of the line forward, and everyone hears every call.",
+        "Only the colour word may be spoken — no tone, timing, or other signal."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 99,
+        "unit": "prisoners"
+      },
+      "hints": [
+        "The very last person to be seen can gain no information about their own hat. Could you spend that one person's call to send information to everyone else?",
+        "What if the rearmost prisoner announces something summarising all the hats they can see — such as whether the number of red hats ahead is odd or even?",
+        "Given that shared summary plus every call they hear afterwards, how can each later prisoner pin down their own colour exactly?"
+      ],
+      "whyExplanation": "They can guarantee 99. The prisoner at the very back sees all 99 hats in front and calls a colour that encodes the parity of the red hats they see — for example, \"red\" if the number of red hats ahead is odd and \"blue\" if it is even. This call is a pure signal and only a 50/50 gamble for that prisoner's own hat, so they cannot be guaranteed. But every other prisoner can now deduce their own hat exactly: each hears the announced parity, sees the hats still in front of them, and keeps track of the colours already called out behind them. The only value of their own hat that is consistent with the announced parity is forced, so they call it correctly. Thus all 99 prisoners ahead of the signaller are always saved, and 99 is the most that can be guaranteed.",
+      "comingSoon": false
+    },
+    {
+      "id": "hex-first-player",
+      "title": "The Game of Hex",
+      "tagline": "A game that cannot tie hides a secret about moving first.",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "Hex is played on a rhombic board of hexagonal cells. Two players take turns placing a stone of their own colour on any empty cell. One player is trying to connect their two opposite sides of the board with an unbroken chain of their stones; the other player is trying to connect the other two opposite sides with theirs. A fundamental fact about Hex is that the board can never end in a draw: once every cell is filled, exactly one of the two players has completed a connecting chain. Given perfect play, does the first player have a guaranteed winning strategy?",
+      "rules": [
+        "Players alternate placing stones on empty cells; stones are never moved or removed.",
+        "Each player wins only by linking their own pair of opposite sides.",
+        "Hex can never be a draw — when the board is full, exactly one player has connected their sides."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "binary",
+        "question": "Does the first player have a guaranteed winning strategy?",
+        "optionA": "Yes",
+        "optionB": "No",
+        "correctIsA": true
+      },
+      "hints": [
+        "Since the game can never tie, exactly one player must have a winning strategy. Suppose, for the sake of argument, it were the second player.",
+        "If the second player had a winning strategy, could the first player quietly \"borrow\" it by making an arbitrary first move and then pretending to be the second player?",
+        "In this game, can having one extra stone already on the board ever hurt you? If not, what does that do to the assumption you were testing?"
+      ],
+      "whyExplanation": "Yes — the first player has a guaranteed winning strategy, shown by a strategy-stealing argument. Because Hex can never be a draw, exactly one player must have a winning strategy. Suppose it were the second player. Then the first player could steal it: make any arbitrary first move, then simply follow the second player's winning strategy as if they were the second player, ignoring their extra stone. In Hex an extra stone of your own colour can never be a disadvantage — it can only help connect your sides — so having placed one already is at worst harmless. This means the first player could guarantee a win, contradicting the assumption that the second player had the winning strategy. Therefore it must be the first player who holds the winning strategy. The argument is non-constructive: it proves a winning strategy exists without revealing what it is, which is why no explicit strategy is known for large boards.",
+      "comingSoon": false
+    },
+    {
+      "id": "egg-drop",
+      "title": "Two Eggs, One Hundred Floors",
+      "tagline": "Find the breaking floor with two eggs and the fewest drops.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You are standing in a building with 100 floors and you have 2 identical eggs. There is some unknown floor such that an egg dropped from at or above it always breaks, while an egg dropped from any floor below it always survives. A broken egg cannot be used again. You want to determine exactly which floor that is.\n\nUsing the best possible strategy, what is the smallest number of drops that is guaranteed to find the floor no matter where it turns out to be?",
+      "rules": [
+        "You have exactly 2 eggs to work with.",
+        "An egg breaks if and only if dropped from at or above the unknown floor.",
+        "A broken egg is gone; a survived egg may be dropped again.",
+        "The building has 100 floors, and you want the worst-case guarantee."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 14,
+        "unit": "drops"
+      },
+      "hints": [
+        "If you had only one egg, how would you be forced to search, and how many drops could that cost you in the worst case?",
+        "Once your first egg breaks, what are you forced to do with the second egg, and how does that limit where you dare to drop the first?",
+        "If your first drop is at floor f and it breaks, how many floors must the second egg then check one at a time?",
+        "What if each successive jump for the first egg were one floor smaller than the last — how far up could you reach in a fixed number of drops?"
+      ],
+      "whyExplanation": "The trick is to keep the worst case constant. Say your first drop is at floor f. If it breaks, the second egg must be tested one floor at a time from 1 up to f - 1, so that branch costs up to f drops in total. To keep the worst case the same after the first egg survives, your next jump should be one floor smaller: f, then f + (f - 1), then f + (f - 1) + (f - 2), and so on. Starting with a jump of n, you can cover n + (n - 1) + ... + 1 = n(n + 1) / 2 floors. You need n(n + 1) / 2 >= 100; n = 13 covers only 91, but n = 14 covers 14 x 15 / 2 = 105. So start at floor 14, then 27, then 39, and so on — 14 drops always suffice.",
+      "comingSoon": false
+    },
+    {
+      "id": "tower-of-hanoi",
+      "title": "The Tower of Hanoi",
+      "tagline": "Move a 20-disk tower between pegs in the fewest moves.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You have three pegs and a stack of 20 disks of different sizes resting on the first peg, arranged largest at the bottom up to smallest at the top. You must move the entire stack onto another peg. You may move only one disk at a time — always the top disk of some peg — and you may never place a larger disk on top of a smaller one.\n\nWhat is the minimum number of single-disk moves needed to move all 20 disks onto another peg?",
+      "rules": [
+        "There are three pegs in total.",
+        "Each move takes the top disk of one peg and places it on another peg.",
+        "A larger disk may never rest on top of a smaller disk.",
+        "You start with 20 disks stacked in size order."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 1048575,
+        "unit": "moves"
+      },
+      "hints": [
+        "Before the single largest disk can ever move, where must all the disks above it be sitting — and how many disks is that?",
+        "If you already knew the fewest moves for a stack of one less disk, how many moves does adding one more disk cost you?",
+        "How does the count grow for a stack of 1, then 2, then 3 disks? What kind of pattern is that?"
+      ],
+      "whyExplanation": "To move the biggest disk, all 19 disks above it must first be stacked out of the way on the spare peg — a full 19-disk transfer. Then the big disk moves once, and finally the 19-disk stack is moved on top of it — another full 19-disk transfer. So if T(n) is the minimum for n disks, T(n) = 2 x T(n - 1) + 1 with T(1) = 1. Solving this gives T(n) = 2^n - 1. For 20 disks that is 2^20 - 1 = 1,048,575 moves.",
+      "comingSoon": false
+    },
+    {
+      "id": "hundred-lockers",
+      "title": "The Hundred Lockers",
+      "tagline": "A hundred lockers, a hundred togglers — how many end open?",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A hallway has 100 lockers, numbered 1 to 100, and every locker starts closed. Then 100 people walk down the hallway in turn. Person 1 toggles every locker (opening each closed one and closing each open one). Person 2 toggles every 2nd locker: 2, 4, 6, and so on. Person 3 toggles every 3rd locker: 3, 6, 9, and so on. This continues up to person 100, who toggles only locker 100.\n\nAfter all 100 people have passed, how many lockers are open?",
+      "rules": [
+        "All 100 lockers begin closed.",
+        "Person k toggles lockers k, 2k, 3k, ... up to 100.",
+        "Toggling flips a locker: closed becomes open, open becomes closed.",
+        "You want the count of open lockers after all 100 people have passed."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 10,
+        "unit": "lockers"
+      },
+      "hints": [
+        "Which people, exactly, touch a particular locker — say locker 12? What do their numbers have in common with 12?",
+        "A locker ends open only if it is toggled an odd number of times. When does a number have an odd number of divisors?",
+        "Try listing the divisors of a few numbers. Which numbers have a divisor that is not part of a matching pair?"
+      ],
+      "whyExplanation": "Locker n is toggled once by each person whose number divides n — that is, once for every divisor of n. Since a locker starts closed, it ends open only if it is toggled an odd number of times. Divisors normally come in pairs (d and n / d), which is an even count — except when d = n / d, i.e. when n is a perfect square and its square root is unpaired. So only the perfect-square lockers stay open: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 — exactly 10 lockers.",
+      "comingSoon": false
+    },
+    {
+      "id": "bridge-crossing",
+      "title": "The Midnight Bridge",
+      "tagline": "Four people, one torch, a fragile bridge — cross in the least time.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "Four people must cross a rickety bridge in the dark. They share a single torch, and the bridge can hold at most two people at a time. Anyone on the bridge must be carrying the torch, so after each crossing it has to be walked back for the others. The four walk at different speeds and take 1, 2, 5, and 10 minutes to cross; when two cross together, they move at the pace of the slower one.\n\nWhat is the least total time for all four to get across?",
+      "rules": [
+        "At most two people may be on the bridge at once.",
+        "Whoever crosses must carry the one torch, so it must be walked back.",
+        "A crossing pair takes as long as its slower member.",
+        "Individual crossing times are 1, 2, 5, and 10 minutes."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 17,
+        "unit": "minutes"
+      },
+      "hints": [
+        "The torch must return after every crossing except the last. Who should carry it back to waste the least time?",
+        "The two slowest walkers each take a long time on their own. Is there a way to make them cross at the same time?",
+        "Does the fastest person really have to be the one shuttling the torch on every single trip?"
+      ],
+      "whyExplanation": "The tempting plan is to let the fastest person escort everyone: 1 walks each of 2, 5, and 10 across and runs back each time, costing 1 + 2 + 1 + 5 + 1 + 10 = 20 minutes. The better idea is to make the two slowest cross together so you only pay for the slow trip once. Send 1 and 2 over (2 minutes), send 1 back (1), send 5 and 10 over together (10), send 2 back (2), then send 1 and 2 over (2): total 2 + 1 + 10 + 2 + 2 = 17 minutes.",
+      "comingSoon": false
+    },
+    {
+      "id": "wolf-goat-cabbage",
+      "title": "The River Crossing",
+      "tagline": "Ferry a wolf, a goat, and a cabbage across — nothing eaten.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A farmer must ferry a wolf, a goat, and a cabbage across a river. The boat is small: it carries the farmer plus at most one of the three. If they are left together without the farmer, the wolf will eat the goat, and the goat will eat the cabbage. The farmer needs to get all three safely to the far bank.\n\nCounting every trip the boat makes across the river, in either direction, as one crossing, what is the fewest crossings needed?",
+      "rules": [
+        "The boat carries the farmer plus at most one item.",
+        "The wolf and goat must never be left together without the farmer.",
+        "The goat and cabbage must never be left together without the farmer.",
+        "Each trip across the river, in either direction, counts as one crossing."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 7,
+        "unit": "crossings"
+      },
+      "hints": [
+        "Which single item cannot safely be left with either of the other two? Where should it go first?",
+        "Is a trip ever wasted, or could carrying something back across actually be part of the solution?",
+        "Once the goat is on the far bank, how do you deliver the wolf without ever leaving it alone with the goat?"
+      ],
+      "whyExplanation": "The goat is the troublemaker — it can be left with neither the wolf nor the cabbage. So take the goat over first (1) and return empty (2). Take the wolf over (3), but bring the goat back (4) so it is not left with the wolf. Drop the goat, take the cabbage over (5) — now the wolf and cabbage sit safely together — and return empty (6). Finally take the goat over (7). The key move is ferrying the goat back on the fourth trip; that is what makes 7 crossings enough.",
+      "comingSoon": false
+    },
+    {
+      "id": "water-jugs",
+      "title": "The Die Hard Jugs",
+      "tagline": "Measure exactly four gallons with a 3 and a 5.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You have two jugs — one holds exactly 3 gallons and the other exactly 5 gallons — both empty, plus a tap with unlimited water. Neither jug has any markings, so the only things you can do are fill a jug completely, empty a jug entirely, or pour from one jug into the other until either the first jug is empty or the second jug is full. You need to end up with exactly 4 gallons of water measured out.\n\nCounting each fill, each empty, and each pour as one step, what is the fewest steps to measure exactly 4 gallons?",
+      "rules": [
+        "A jug can only be filled to the top, emptied completely, or poured into the other.",
+        "A pour stops when the source jug is empty or the destination jug is full.",
+        "The jugs have no intermediate markings.",
+        "Each fill, empty, or pour counts as one step."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 6,
+        "unit": "steps"
+      },
+      "hints": [
+        "The jugs are 3 and 5. Besides 3 or 5, what amounts can you be left with in a jug after a single pour?",
+        "If you pour the full 5-gallon jug into the empty 3-gallon jug, how much is stranded behind in the big jug?",
+        "Could a small leftover amount sitting in the 3-gallon jug be used to block off most of a fresh 5-gallon fill?"
+      ],
+      "whyExplanation": "Fill the 5-gallon jug (1). Pour it into the 3-gallon jug until that is full — 2 gallons remain in the 5 (2). Empty the 3-gallon jug (3). Pour those 2 gallons into the 3-gallon jug (4); it now holds 2 with room for just 1 more. Fill the 5-gallon jug again (5). Pour from the 5 into the 3 until the 3 is full — that takes exactly 1 gallon, leaving 4 gallons behind in the 5-gallon jug (6). Six steps, and the big jug holds exactly 4.",
+      "comingSoon": false
+    },
+    {
+      "id": "camel-bananas",
+      "title": "The Camel and the Bananas",
+      "tagline": "Shuttle 3000 bananas 1000 miles — how many survive the trip?",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You have 3000 bananas, a camel, and a market that is 1000 miles away. The camel can carry at most 1000 bananas at a time, and it eats 1 banana for every mile it walks — whether it is heading toward the market or back. Because it can carry only 1000 at once, you will have to move the bananas forward in stages, shuttling back and forth and leaving piles along the way to pick up later.\n\nPlaying this as cleverly as possible, what is the greatest number of bananas you can get all the way to the market?",
+      "rules": [
+        "The camel carries at most 1000 bananas per trip.",
+        "The camel eats 1 banana for each mile it walks, in either direction.",
+        "You may drop bananas at any point and collect them later.",
+        "You start with 3000 bananas and the market is 1000 miles away."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 533,
+        "unit": "bananas"
+      },
+      "hints": [
+        "With 3000 bananas you cannot carry them all at once — while a pile is still above 1000, how many loaded trips forward must you make?",
+        "To advance the whole hoard one mile while making several passes over it, how many bananas does each mile cost — and when does that cost drop?",
+        "At which pile sizes does the number of trips step down, and how far can you push the hoard before each of those drops?"
+      ],
+      "whyExplanation": "While you hold more than 2000 bananas you need 3 loads forward plus 2 returns = 5 trips per mile, burning 5 bananas per mile. It takes 200 miles to eat 1000 and drop to 2000 (cost 5 x 200 = 1000). From 2000 down toward 1000 you need 2 loads forward plus 1 return = 3 trips per mile, burning 3 per mile; another 1000 bananas is eaten over 333 more miles, leaving about 1000 bananas at roughly mile 533. For the final stretch a single load carries the 1000 bananas the remaining 1000 - 533 = 467 miles, eating 467. That delivers 1000 - 467 = 533 bananas.",
+      "comingSoon": false
+    },
+    {
+      "id": "twelve-coins",
+      "title": "The Twelve Coins",
+      "tagline": "One fake coin, unknown heavy or light — find it on a balance.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You have 12 coins that look identical. Exactly one is counterfeit and weighs slightly different from the rest — but you do not know whether the fake is heavier or lighter than a genuine coin. Your only tool is a balance scale, which compares whatever you put in its two pans and tells you which side is heavier, or that the two sides are equal. You must identify the counterfeit coin AND determine whether it is heavy or light.\n\nWhat is the smallest number of weighings that is guaranteed to work no matter which coin is fake?",
+      "rules": [
+        "Exactly one of the 12 coins is fake; the other 11 weigh the same.",
+        "You do not know in advance whether the fake is heavier or lighter.",
+        "Each weighing reports left-heavier, right-heavier, or balanced.",
+        "You must name the fake coin and say whether it is heavy or light."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 3,
+        "unit": "weighings"
+      },
+      "hints": [
+        "Each weighing has three possible outcomes. In n weighings, how many different outcome sequences are there?",
+        "There are 12 coins, and for each there are two possibilities — heavy or light. How many total cases must your plan tell apart?",
+        "How could you choose the first weighing so that every one of its three outcomes leaves a case you can still finish in the weighings that remain?"
+      ],
+      "whyExplanation": "Each weighing has 3 outcomes — left down, right down, or balanced — so n weighings can distinguish at most 3^n cases. You must pin down which of 12 coins is fake and whether it is heavy or light, which is 24 possibilities. Since 3^2 = 9 is less than 24 but 3^3 = 27 is at least 24, two weighings cannot guarantee an answer while three can. A careful scheme (start 4 coins against 4, then regroup while tracking which coins are \"suspected heavy\" versus \"suspected light\") always isolates the fake and its direction in exactly 3 weighings.",
+      "comingSoon": false
+    },
+    {
+      "id": "secretary-problem",
+      "title": "The Secretary Problem",
+      "tagline": "Interview in random order — when should you stop looking?",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You must hire one assistant from 100 applicants. You interview them one at a time in a completely random order. Right after each interview you must decide on the spot: hire this person and stop, or reject them forever with no way to call them back. You can only rank the people you have already interviewed against one another, and your single goal is to end up hiring the very best applicant of all 100. The strategy is to automatically reject a first batch of candidates, no matter how strong they seem, and then hire the first later candidate who is better than everyone seen so far.\n\nHow many candidates should you reject in that first batch to give yourself the best possible chance of landing the single best applicant?",
+      "rules": [
+        "All 100 are interviewed one at a time in a uniformly random order.",
+        "After each interview you must immediately hire and stop, or reject forever.",
+        "You can only rank candidates against those already interviewed.",
+        "Success means hiring the single best of all 100."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 37,
+        "unit": "candidates"
+      },
+      "hints": [
+        "Reject too few and you have little to compare against; reject too many and the best may already be gone. What are you trading off?",
+        "If you reject the first r and then take the next record-breaker, the best is caught only when the best of the sample sits somewhere in those first r. How does the chance of winning depend on r?",
+        "As the number of candidates grows large, what famous mathematical constant does the ideal fraction to reject approach?"
+      ],
+      "whyExplanation": "This is the classic \"look, then leap\" strategy. You spend the first group purely gathering information — rejecting everyone but remembering the best so far — then hire the first candidate who beats that benchmark. If you reject the first r of n, the probability of ending up with the very best is (r / n) x (1 / r + 1 / (r + 1) + ... + 1 / (n - 1)). Maximizing over r, the optimal cutoff approaches n / e as n grows, and the best-case success probability approaches 1 / e, about 37%. For n = 100 the optimum is to reject the first 37 (since 100 / e is about 36.8), then take the next candidate better than all 37.",
+      "comingSoon": false
+    },
+    {
+      "id": "handshake-couples",
+      "title": "The Handshake Party",
+      "tagline": "Nine different handshake counts — how many did your spouse make?",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You and your spouse attend a party along with four other couples — ten people in all. During the party people shake hands, but nobody shakes their own hand or their spouse's hand, and no two people shake hands with each other more than once. Afterward you ask each of the other nine people — everyone except yourself — how many hands they shook. Remarkably, all nine give you a different number.\n\nGiven that, how many hands did your spouse shake?",
+      "rules": [
+        "There are five couples: you and your spouse plus four other couples, ten people in all.",
+        "No one shakes their own or their spouse's hand.",
+        "No pair of people shakes hands more than once.",
+        "The nine people you asked all reported different counts."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 4,
+        "unit": "handshakes"
+      },
+      "hints": [
+        "What is the full range of hands one person could possibly shake here? Since the nine answers are all different, what must those nine numbers be?",
+        "Think about the person who shook the most hands and the person who shook the fewest. Who must be married to whom, and why?",
+        "If you keep pairing the highest remaining count with the lowest into couples, where do you and your spouse end up?"
+      ],
+      "whyExplanation": "Each person can shake between 0 and 8 hands (everyone except themselves and their spouse), so the nine different answers must be exactly 0, 1, 2, 3, 4, 5, 6, 7, and 8. The person who shook 8 shook everyone they possibly could, so everyone except their spouse shook that person's hand — which forces the person who shook 0 to be the 8-shaker's spouse. Peeling that couple away, the 7-shaker and the 1-shaker must likewise be married, then 6 with 2, and 5 with 3. That leaves the person who shook 4 as the only one of the nine not in such a high-low pair, so their partner is you. Your spouse shook 4 hands.",
+      "comingSoon": false
+    },
+    {
+      "id": "trailing-zeros",
+      "title": "Zeros at the End of 100!",
+      "tagline": "A tower of zeros hides at the tail of a huge number.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "The number 100! (100 factorial) means 100 × 99 × 98 × … × 3 × 2 × 1, the product of every whole number from 1 up to 100. Written out in full, it is a gigantic number that ends in a run of zeros.\n\nHow many zeros does 100! end in?",
+      "rules": [
+        "100! is the product of all integers from 1 through 100.",
+        "Count only the consecutive zeros at the very end of the number."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 24,
+        "unit": "zeros"
+      },
+      "hints": [
+        "A trailing zero appears each time the product picks up a factor of 10 — so what pair of primes must multiply together to make each 10?",
+        "There are far more even numbers than multiples of 5 in 1…100, so which of the two primes is the scarce one that limits the count?",
+        "How many multiples of 5 are there up to 100 — and do any numbers, like 25, 50, 75 and 100, secretly contribute more than one 5?"
+      ],
+      "whyExplanation": "Each trailing zero comes from a factor of 10 = 2 × 5. Factors of 2 are plentiful, so the number of trailing zeros equals the number of factors of 5 in 100!. Count them: ⌊100 ÷ 5⌋ = 20 numbers contribute a 5 (5, 10, 15, …, 100), and ⌊100 ÷ 25⌋ = 4 of those (25, 50, 75, 100) contribute a second 5. That gives 20 + 4 = 24 factors of 5, so 100! ends in exactly 24 zeros.",
+      "comingSoon": false
+    },
+    {
+      "id": "send-more-money",
+      "title": "SEND + MORE = MONEY",
+      "tagline": "Turn the letters back into the digits they stand for.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "In this famous cryptarithm each letter stands for a single digit from 0 to 9. Different letters stand for different digits, the same letter always stands for the same digit, and no number may begin with 0.\n\n    S E N D\n  + M O R E\n  ---------\n  M O N E Y\n\nThere is exactly one solution. What number does MONEY stand for?",
+      "rules": [
+        "Each letter is a distinct digit 0–9; equal letters share the same digit.",
+        "Neither SEND, MORE, nor MONEY may have a leading zero.",
+        "SEND + MORE must equal MONEY exactly."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 10652
+      },
+      "hints": [
+        "MONEY has five digits but comes from adding two four-digit numbers — so what is the only value its leading letter M can possibly take?",
+        "Once M is fixed, the sum S + M (plus any carry) has to spill into that leading digit — what does that force the letter O to be?",
+        "Work the columns from the right, tracking each carry: what must D + E end in to produce Y, and which digits are still free to use?"
+      ],
+      "whyExplanation": "Adding two four-digit numbers can produce at most a leading 1, so M = 1. The thousands column then forces S + M to carry, which pins O = 0. Carrying carefully through each column from the right gives the unique assignment S=9, E=5, N=6, D=7, M=1, O=0, R=8, Y=2. Checking: SEND = 9567 and MORE = 1085, and 9567 + 1085 = 10652 = MONEY. So MONEY = 10652.",
+      "comingSoon": false
+    },
+    {
+      "id": "eight-queens",
+      "title": "The Eight Queens",
+      "tagline": "Fit eight queens on the board with no one under threat.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A chess queen attacks any square in the same row, the same column, or along either diagonal. You must place 8 queens on a standard 8×8 chessboard so that no two queens attack each other.\n\nIn how many distinct arrangements can all 8 queens be placed?",
+      "rules": [
+        "The board is 8×8 and you place exactly 8 queens.",
+        "No two queens may share a row, a column, or a diagonal.",
+        "Count every distinct valid arrangement of the queens."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 92,
+        "unit": "arrangements"
+      },
+      "hints": [
+        "If no two queens share a row and no two share a column, how many queens must end up in each row and in each column?",
+        "That means each solution is really a way of choosing one column per row — so which extra rule still rules many of those choices out?",
+        "Could you build solutions row by row, placing a queen and backtracking whenever a diagonal clashes — what happens if you try a smaller board first to see the pattern?"
+      ],
+      "whyExplanation": "Because no two queens share a row or column, every solution places exactly one queen in each row and each column — it is a permutation of the columns. The diagonal rule eliminates most permutations. Placing queens row by row and backtracking whenever two land on a common diagonal, the search finds exactly 92 valid arrangements (of which 12 are unique up to rotation and reflection). So the answer is 92.",
+      "comingSoon": false
+    },
+    {
+      "id": "climb-stairs",
+      "title": "Climbing the Staircase",
+      "tagline": "Every trip up the stairs can be taken a different way.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A staircase has 10 steps. On each move you may climb either 1 step or 2 steps. You start at the bottom and finish exactly on the top step.\n\nHow many distinct sequences of moves reach the top?",
+      "rules": [
+        "The staircase has exactly 10 steps.",
+        "Each move goes up either 1 or 2 steps.",
+        "Two climbs differ if their sequence of 1s and 2s differs."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 89,
+        "unit": "ways"
+      },
+      "hints": [
+        "To land on the very top step, what was the size of your last move — and which step did you have to be standing on just before it?",
+        "That means the ways to reach step 10 split cleanly into two groups: how do they relate to the ways to reach steps 9 and 8?",
+        "If you tally the number of ways for 1 step, then 2 steps, then 3, does a familiar sequence start to appear as you climb higher?"
+      ],
+      "whyExplanation": "The last move onto step 10 was either a 1-step (from step 9) or a 2-step (from step 8), so ways(10) = ways(9) + ways(8). This is the Fibonacci recurrence. Starting from ways(1) = 1 and ways(2) = 2, the counts run 1, 2, 3, 5, 8, 13, 21, 34, 55, 89. The tenth value is 89, so there are 89 distinct ways to climb the staircase.",
+      "comingSoon": false
+    },
+    {
+      "id": "parentheses",
+      "title": "Balanced Parentheses",
+      "tagline": "Some strings of brackets close cleanly — count only those.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You have 4 opening brackets \"(\" and 4 closing brackets \")\", eight symbols in all. Arrange them in a row so the result is correctly balanced: reading left to right, no closing bracket ever appears without a matching opening bracket still waiting, and every bracket is paired by the end.\n\nHow many correctly balanced arrangements are there?",
+      "rules": [
+        "Use exactly 4 \"(\" and 4 \")\" symbols, arranged in a single row.",
+        "At every point, closing brackets so far may not exceed opening brackets.",
+        "By the end all 8 brackets must be matched."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 14,
+        "unit": "ways"
+      },
+      "hints": [
+        "Scanning left to right, if you score +1 for \"(\" and −1 for \")\", what must the running total never do, and where must it end?",
+        "Consider the opening bracket that matches the very first \"(\" — how does the position of its partner split the whole string into two smaller balanced pieces?",
+        "If you count the balanced arrangements for 1 pair, then 2 pairs, then 3, does the growing sequence of counts look familiar?"
+      ],
+      "whyExplanation": "The number of ways to balance n pairs of parentheses is the nth Catalan number. Matching the first \"(\" with one of the later \")\" splits every valid string into two smaller balanced strings, which gives the Catalan recurrence. The counts run 1, 2, 5, 14, … for 1, 2, 3, 4 pairs. For 4 pairs the Catalan number is C₄ = 14, so there are 14 balanced arrangements.",
+      "comingSoon": false
+    },
+    {
+      "id": "clock-overlaps",
+      "title": "When the Hands Meet",
+      "tagline": "The two hands chase each other around the dial all day.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "On an ordinary analog clock the minute hand sweeps around the face once every hour, while the hour hand creeps around once every 12 hours. Both move smoothly and continuously. Consider a full 12-hour period, from 12:00 up to (but not repeating) the next 12:00.\n\nHow many times do the hour and minute hands exactly overlap during those 12 hours?",
+      "rules": [
+        "Both hands move continuously, not in ticks.",
+        "The minute hand completes a lap every 60 minutes; the hour hand every 12 hours.",
+        "Count an overlap each time the two hands point in exactly the same direction within the 12-hour span."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 11,
+        "unit": "times"
+      },
+      "hints": [
+        "In 12 hours, how many full laps does the minute hand make, and how many does the hour hand make?",
+        "An overlap happens each time the faster hand gains exactly one whole lap on the slower one — so how many laps does the minute hand gain over the hour hand across the whole period?",
+        "Starting from the shared position at 12:00, if the hands next meet every 12/11 of an hour, how many such meetings fit into 12 hours?"
+      ],
+      "whyExplanation": "Overlaps happen whenever the minute hand gains a full lap on the hour hand. In 12 hours the minute hand completes 12 laps and the hour hand completes 1, so the minute hand gains 12 − 1 = 11 laps — one overlap per lap gained. Equivalently the hands coincide every 12/11 of an hour (about every 65.45 minutes), which happens 11 times in 12 hours. So the hands overlap 11 times.",
+      "comingSoon": false
+    },
+    {
+      "id": "power-last-digits",
+      "title": "The Last Two Digits",
+      "tagline": "A colossal power still shows its final two digits.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "Consider 3 raised to the power 2023 — that is, 3 multiplied by itself 2023 times. Written out, it is an enormous number, but you only care about how it ends.\n\nWhat are the last two digits of 3^2023? Enter them as a two-digit number (for example, an ending of \"05\" would be entered as 5).",
+      "rules": [
+        "The last two digits mean the number modulo 100.",
+        "Enter the two-digit ending as a number (a leading zero is dropped)."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 27
+      },
+      "hints": [
+        "Only the last two digits matter, so what happens if you multiply by 3 each step and keep just the final two digits every time?",
+        "Do those endings eventually repeat? If they cycle, how long is one full cycle before the pattern starts over?",
+        "Once you know the cycle length, what does 2023 leave as a remainder when divided by it, and which power does that remainder point to?"
+      ],
+      "whyExplanation": "Keeping only the last two digits means working modulo 100. The endings of successive powers of 3 repeat with a cycle length of 20: 3, 9, 27, 81, 43, … and back around. Since 2023 = 20 × 101 + 3, the exponent 2023 lands at the same place in the cycle as exponent 3. Because 3^3 = 27, the last two digits of 3^2023 are 27.",
+      "comingSoon": false
+    },
+    {
+      "id": "mcnugget",
+      "title": "The Unreachable Total",
+      "tagline": "Fixed pack sizes leave a few totals forever out of reach.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A shop sells one item only in sealed packs of 6, 9, or 20. You may buy any number of packs of each size, but you can never split a pack. Some exact totals can be made (for example 15 = 6 + 9), while a few small totals cannot be made at all.\n\nWhat is the largest total quantity that can NOT be bought exactly?",
+      "rules": [
+        "Packs come in sizes 6, 9, and 20 only.",
+        "You may use any whole number of each pack, including none of a size.",
+        "Find the greatest total that no combination of packs can add up to."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 43
+      },
+      "hints": [
+        "Which small totals simply cannot be assembled from 6, 9, and 20 — try listing the impossible ones as you count upward?",
+        "If you ever find 6 buildable totals in a row, why does that guarantee every larger total is reachable too?",
+        "What is the last impossible total you hit before that unbroken run of reachable totals begins?"
+      ],
+      "whyExplanation": "This is the Frobenius number for 6, 9, and 20 — the largest total that no non-negative combination of those sizes can form. Checking totals in order, 43 cannot be made from 6s, 9s, and 20s, but 44 = 20 + 6 × 4, 45 = 9 × 5, 46 = 20 × 2 + 6, 47 = 20 + 9 × 3, 48 = 6 × 8, and 49 = 20 + 9 + 20 are all possible. Once six consecutive totals are reachable, adding a 6 reaches everything beyond, so nothing above 43 is impossible. The answer is 43.",
+      "comingSoon": false
+    },
+    {
+      "id": "digits-of-power",
+      "title": "How Many Digits?",
+      "tagline": "Doubling a hundred times makes a number — how long is it?",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "Start at 1 and double it 100 times; the result is 2 raised to the power 100. Written out in ordinary base-10 form, it is a long string of digits.\n\nHow many digits long is 2^100?",
+      "rules": [
+        "The number is 2 multiplied by itself 100 times.",
+        "Count the digits of the value written in base 10."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 31,
+        "unit": "digits"
+      },
+      "hints": [
+        "A base-10 number’s digit count is tied to which mathematical operation — what tells you the power of 10 a number sits between?",
+        "Between which two powers of 10 does 2^100 fall, and how does a number’s position between 10^k and 10^(k+1) fix its digit count?",
+        "If you know that log base 10 of 2 is about 0.301, what is 100 times that value, and how do you turn it into a digit count?"
+      ],
+      "whyExplanation": "A positive whole number N has ⌊log₁₀ N⌋ + 1 digits, because that floor tells you the highest power of 10 that fits inside it. Here log₁₀(2^100) = 100 × log₁₀ 2 ≈ 100 × 0.30103 = 30.103. Taking the floor gives 30, so the digit count is 30 + 1 = 31. Thus 2^100 has 31 digits.",
+      "comingSoon": false
+    },
+    {
+      "id": "birthday-paradox",
+      "title": "The Birthday Paradox",
+      "tagline": "A surprisingly small crowd almost certainly shares a birthday.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "People enter a room one at a time. Assume every birthday is one of 365 equally likely days and ignore leap years. As the room fills, the chance that at least two people share a birthday keeps rising.\n\nWhat is the smallest number of people for which that chance first exceeds 50%?",
+      "rules": [
+        "There are 365 equally likely birthdays and no leap years.",
+        "A \"match\" means any two or more people share the same birthday.",
+        "Find the fewest people needed for the match probability to exceed 50%."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "numberEntry",
+        "answer": 23,
+        "unit": "people"
+      },
+      "hints": [
+        "Instead of chasing every possible match, is it easier to work out the chance that everyone’s birthday is different?",
+        "As each new person arrives, how many of the 365 days are still unused, and how do you combine those shrinking fractions?",
+        "You want the \"all different\" probability to drop below one-half — at which headcount does that product first cross below 0.5?"
+      ],
+      "whyExplanation": "It is easier to track the probability that all birthdays differ. With k people that is (365/365) × (364/365) × … × ((365 − k + 1)/365), since each new person must dodge the days already taken. This product stays above 0.5 for 22 people (about 0.524, so a match chance near 47.6%) but drops to about 0.493 for 23 people, making the match probability about 50.7% — just over half. So 23 people are needed.",
+      "comingSoon": false
+    },
+    {
+      "id": "monty-hall",
+      "title": "The Monty Hall Problem",
+      "tagline": "One car, two goats, and a host who knows.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You are on a game show facing three closed doors. Behind one door is a car; behind each of the other two is a goat. You pick a door — say, Door 1 — but it stays closed. The host, who knows what is behind every door, opens one of the other two doors and always reveals a goat. He then offers you the choice to stay with your original door or switch to the one remaining closed door. If you always switch, what is your chance of winning the car?",
+      "rules": [
+        "Behind the three doors: 1 car and 2 goats, placed at random.",
+        "You pick one door first; it is not opened.",
+        "The host always opens a different door and always reveals a goat.",
+        "You then choose to stay or switch to the last closed door."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "If you always switch, what is your chance of winning the car?",
+        "options": [
+          "1/2",
+          "2/3",
+          "1/3",
+          "3/4"
+        ],
+        "correctIndex": 1
+      },
+      "hints": [
+        "How likely was your very first pick to be the car, before any door opened?",
+        "Does the host — who never reveals the car — give you real information about the doors you did not pick?",
+        "If your first pick is a goat (the more common case), where must the car be after a goat is revealed?"
+      ],
+      "whyExplanation": "Your first pick is the car only 1/3 of the time and a goat 2/3 of the time. Whenever you first picked a goat — 2 times out of 3 — the host is forced to reveal the other goat, so the remaining closed door hides the car. Switching therefore wins exactly when your first pick was a goat: 2/3 of the time. Staying wins only the 1/3 of cases where you had already landed on the car.",
+      "comingSoon": false
+    },
+    {
+      "id": "boy-tuesday",
+      "title": "The Tuesday Birthday Boy",
+      "tagline": "Two kids, and one very specific clue.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A parent has exactly two children. Each child is independently a boy or a girl with equal probability, and is equally likely to have been born on any of the seven days of the week. You are told just one fact: at least one of the two children is a boy born on a Tuesday. Given only this, what is the probability that both children are boys?",
+      "rules": [
+        "There are exactly two children.",
+        "Each child is a boy or a girl, each with probability 1/2.",
+        "Each child is equally likely to be born on any of the 7 days, independently of sex and of the other child.",
+        "You know only that at least one child is a boy born on a Tuesday."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "What is the probability that both children are boys?",
+        "options": [
+          "1/2",
+          "1/3",
+          "13/27",
+          "14/27"
+        ],
+        "correctIndex": 2
+      },
+      "hints": [
+        "Describe each child by both sex and day of birth — how many equally likely combinations does that give for one child, and for the pair?",
+        "Which of those pair-combinations actually contain a boy born on a Tuesday?",
+        "Among only those matching pairs, in how many are both children boys — and how do you avoid double-counting the two-Tuesday-boys case?"
+      ],
+      "whyExplanation": "Tag each child by sex and weekday: 14 equally likely states per child, so 14 × 14 = 196 for the pair. Count pairs containing at least one Tuesday-boy: a Tuesday-boy as the first child pairs with 14 states for the second, and as the second child with 14 for the first — that is 28, but the both-are-Tuesday-boys pair is counted twice, leaving 27 matching pairs. Of these, both children are boys in 13 (a Tuesday-boy paired with any of 7 boy-days in either order, minus the one double-count). So the probability is 13/27 — close to 1/2 because the specific day makes the overlap rare.",
+      "comingSoon": false
+    },
+    {
+      "id": "bertrand-box",
+      "title": "The Three Cards",
+      "tagline": "Three cards, and one glimpse of red.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A hat holds three cards. One card is red on both sides. One is black on both sides. One is red on one side and black on the other. You shake the hat, draw a card at random, and lay it flat without looking at the underside. The face you see is red. What is the probability that the other side is also red?",
+      "rules": [
+        "The three cards are: red/red, black/black, and red/black.",
+        "You draw one card uniformly at random and lay it flat.",
+        "The side facing up is equally likely to be either side of that card.",
+        "The face you see happens to be red."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "What is the probability the other side is also red?",
+        "options": [
+          "1/2",
+          "2/3",
+          "1/3",
+          "3/4"
+        ],
+        "correctIndex": 1
+      },
+      "hints": [
+        "How many red faces are there in total across all three cards?",
+        "A red face you are seeing could belong to which cards — and how many red faces does each of those cards contribute?",
+        "Given you are looking at a red face, is every red face equally likely to be the one showing?"
+      ],
+      "whyExplanation": "There are three red faces in the hat: two on the red/red card and one on the red/black card. Seeing a red face, each of those three red faces was equally likely to be the one showing. Two of the three belong to the red/red card, whose hidden side is also red; only one belongs to the red/black card. So the other side is red in 2 of 3 equally likely cases: 2/3. The tempting \"1/2\" wrongly counts cards instead of faces.",
+      "comingSoon": false
+    },
+    {
+      "id": "airplane-seating",
+      "title": "The Absent-Minded Passenger",
+      "tagline": "One lost boarding pass, ninety-nine nervous flyers.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A full flight has 100 seats and 100 passengers, each with a specific assigned seat. The first passenger has lost their boarding pass and simply sits in a seat chosen uniformly at random. Every other passenger then boards in order: each takes their own assigned seat if it is free, and otherwise sits in an empty seat chosen uniformly at random. What is the probability that the 100th passenger ends up in their own assigned seat?",
+      "rules": [
+        "There are 100 passengers and 100 seats; the plane ends up full.",
+        "Passengers board one at a time in a fixed order.",
+        "Passenger 1 sits in a uniformly random seat.",
+        "Each later passenger takes their own seat if free, else a uniformly random free seat."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "What is the probability the 100th passenger gets their own seat?",
+        "options": [
+          "1/2",
+          "1/100",
+          "99/100",
+          "1/e"
+        ],
+        "correctIndex": 0
+      },
+      "hints": [
+        "By the time the last passenger boards, only one seat is left — which two seats are the only candidates it could be?",
+        "Whenever a displaced passenger must choose at random, how do the chances of taking seat #1 versus seat #100 compare?",
+        "Could you test the pattern by first working it out for just 2 or 3 passengers?"
+      ],
+      "whyExplanation": "The only seats that can still be open for the last passenger are passenger 1's own seat and passenger 100's own seat — every other passenger would have claimed their own seat before it could cause trouble. Each time a displaced passenger picks at random, seat 1 and seat 100 are, by symmetry, equally likely to be the one taken. So the outcome reduces to a coin flip between those two seats, and the last passenger gets their own seat with probability 1/2 — no matter how many passengers there are.",
+      "comingSoon": false
+    },
+    {
+      "id": "st-petersburg",
+      "title": "The St. Petersburg Game",
+      "tagline": "A coin game whose \"fair\" price defies belief.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A casino offers this game. A fair coin is flipped repeatedly until it first lands heads. If the first head appears on flip number k, you are paid 2^k dollars: $2 if heads comes on flip 1, $4 on flip 2, $8 on flip 3, and so on, doubling each time. A price is called \"fair\" when it equals the expected (average) payout of one play. What is a fair price to play?",
+      "rules": [
+        "A fair coin is flipped until it first shows heads.",
+        "If the first head is on flip k, the payout is 2^k dollars.",
+        "Flips are independent, each with heads probability 1/2.",
+        "A \"fair\" price equals the expected payout of a single play."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "What is a fair price to play?",
+        "options": [
+          "$4",
+          "$20",
+          "$100",
+          "Infinite"
+        ],
+        "correctIndex": 3
+      },
+      "hints": [
+        "What is the probability the first head appears exactly on flip k, and what does that outcome pay?",
+        "For each possible k, how big is the product (probability × payout) that it contributes to the average?",
+        "When you add up those contributions over all possible values of k, does the total settle on a finite number?"
+      ],
+      "whyExplanation": "The first head lands on flip k with probability (1/2)^k, and that outcome pays 2^k dollars. Each term of the expected value is therefore (1/2)^k × 2^k = 1 dollar. Summing over k = 1, 2, 3, … gives 1 + 1 + 1 + … , which grows without bound. The mathematical expected payout is infinite, so no finite price is \"fair\" by that measure — the paradox being that almost every real play pays only a few dollars.",
+      "comingSoon": false
+    },
+    {
+      "id": "random-walk",
+      "title": "The Drunkard's Walk",
+      "tagline": "A wanderer with no memory and no destination.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A person stands at a marked point on an endless straight line. Every step they move exactly one unit left or one unit right, each with probability 1/2, independently of all previous steps, and they never stop stepping. Is the drunkard certain to eventually return to the starting point?",
+      "rules": [
+        "The path is an infinite straight line, endless in both directions.",
+        "Each step is left or right, each with probability 1/2.",
+        "Steps are independent, and the walk goes on forever.",
+        "\"Return\" means landing back exactly on the start at some later step."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "binary",
+        "question": "Is the drunkard certain to eventually return to the start?",
+        "optionA": "Yes",
+        "optionB": "No",
+        "correctIsA": true
+      },
+      "hints": [
+        "Over many steps, does a perfectly symmetric walk drift steadily away or keep hovering around where it began?",
+        "How does the chance of sitting exactly on the origin after 2n steps shrink as n grows — fast enough to escape for good, or not?",
+        "Would your answer change if the walker wandered an infinite 2-D grid, or a 3-D lattice?"
+      ],
+      "whyExplanation": "A one-dimensional symmetric random walk is recurrent: with probability 1 it returns to its starting point — in fact infinitely often. Though the chance of being exactly at the origin after 2n steps shrinks like 1/√(πn), these return probabilities shrink slowly enough that their sum diverges, which forces certain return. So the answer is Yes. (Remarkably, this recurrence holds in 1-D and 2-D but fails in 3-D, where the walker escapes with positive probability.)",
+      "comingSoon": false
+    },
+    {
+      "id": "nontransitive-dice",
+      "title": "The Unfair Dice",
+      "tagline": "Pick any die you like — you will still lose.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "Two players each choose one die from a special set, then they roll; the higher number wins the round, and they play many rounds. The dice carry unusual face numbers rather than the ordinary 1–6, so \"better\" is not straightforward. In fact such a set can be built so that die A beats die B more than half the time, die B beats die C more than half the time, yet die C beats die A more than half the time. The first player chooses their die first, then the second player chooses. Can the second player always pick a die that beats the first player's?",
+      "rules": [
+        "The players pick from a special set of dice with unusual face numbers.",
+        "In each round the higher roll wins; they play many rounds.",
+        "The set is non-transitive: A beats B, B beats C, and C beats A, each more than half the time.",
+        "The first player commits to a die first; the second player then chooses."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "binary",
+        "question": "Can the second player always pick a die that beats the first player's?",
+        "optionA": "Yes",
+        "optionB": "No",
+        "correctIsA": true
+      },
+      "hints": [
+        "If the \"beats\" relationships form a loop A → B → C → A, is there any single strongest die?",
+        "For whichever die the first player commits to, is there always another die in the loop that beats it more than half the time?",
+        "Does choosing second — with full knowledge of the opponent's die — help or hurt?"
+      ],
+      "whyExplanation": "Because the dice are non-transitive, the \"beats\" relation forms a cycle with no strongest die: for every die there is another that beats it more than half the time. The second player, choosing after the first has committed, can always answer with the die that beats the opponent's choice. So the answer is Yes — going second is a genuine advantage here. Efron's dice are a classic example of such a set.",
+      "comingSoon": false
+    },
+    {
+      "id": "two-envelopes",
+      "title": "The Two Envelopes",
+      "tagline": "The argument that says: always switch. It is wrong.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "Two sealed envelopes each contain money; one holds exactly twice as much as the other. You pick one at random and may keep it or swap for the other. A tempting argument says: let your envelope hold X; the other then holds 2X or X/2 with equal chance, so its expected value is (1/2)(2X) + (1/2)(X/2) = 1.25X — more than X — so you should always switch. Does this switching argument give a genuine advantage?",
+      "rules": [
+        "There are two envelopes; one contains exactly twice the amount of the other.",
+        "You choose one envelope at random, then may switch to the other.",
+        "The \"1.25X\" argument treats your envelope's amount X as fixed while the other envelope varies.",
+        "The question is whether that reasoning truly makes switching better."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "binary",
+        "question": "Does the switching argument give a genuine advantage?",
+        "optionA": "Yes",
+        "optionB": "No",
+        "correctIsA": false
+      },
+      "hints": [
+        "Does the symbol \"X\" refer to the same amount of money in the \"2X\" branch as in the \"X/2\" branch?",
+        "By the very same logic, would the person holding the other envelope also compute a 1.25× gain from switching to yours?",
+        "If switching were always strictly better, what would that imply about switching again, and again?"
+      ],
+      "whyExplanation": "The argument is flawed, so the answer is No. It quietly lets \"X\" mean two different things: in the \"2X\" case your envelope is the smaller amount, but in the \"X/2\" case it is the larger — you cannot hold one fixed X while both branches are true. Naming the two amounts honestly (say A and 2A), switching and staying each average the same 1.5A. Symmetry clinches it: if switching always helped, both players would want to switch, which is impossible. There is no genuine advantage.",
+      "comingSoon": false
+    },
+    {
+      "id": "coupon-collector",
+      "title": "The Coupon Collector",
+      "tagline": "How long until a die has shown every face?",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You roll a fair six-sided die over and over, keeping track of which of the six faces you have seen so far. You stop the instant all six different faces have each appeared at least once. On average, how many rolls does it take to see all six faces at least once?",
+      "rules": [
+        "The die is fair; each of the six faces is equally likely on every roll.",
+        "Rolls are independent of one another.",
+        "You keep rolling until all six distinct faces have appeared.",
+        "\"On average\" means the expected number of rolls over many repetitions."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "On average, how many rolls to see all six faces at least once?",
+        "options": [
+          "6",
+          "About 9.8",
+          "About 14.7",
+          "About 21"
+        ],
+        "correctIndex": 2
+      },
+      "hints": [
+        "Once you have already seen j different faces, what is the probability that a single roll shows a brand-new one?",
+        "If some success has probability p per try, how many tries on average until it first happens?",
+        "How do the waiting times for the 1st, 2nd, …, 6th new face combine into the total?"
+      ],
+      "whyExplanation": "Collect the faces one new kind at a time. When you already have j distinct faces, a roll reveals a new face with probability (6 − j)/6, so the average wait for the next new face is 6/(6 − j). Summing from j = 0 to 5 gives 6 · (1/6 + 1/5 + 1/4 + 1/3 + 1/2 + 1/1) = 6 · (1 + 1/2 + 1/3 + 1/4 + 1/5 + 1/6) ≈ 14.7 rolls.",
+      "comingSoon": false
+    },
+    {
+      "id": "base-rate",
+      "title": "The Positive Test",
+      "tagline": "A 99%-accurate test, and a positive result.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "A certain disease affects 1 in 1000 people at random. A screening test is 99% accurate in both directions: if you have the disease it comes back positive 99% of the time, and if you do not have it it comes back negative 99% of the time. With no symptoms or other risk factors, you take the test and it comes back positive. Given this positive result, what is the chance you actually have the disease?",
+      "rules": [
+        "The disease affects 1 in 1000 people (a base rate of 0.1%).",
+        "True-positive rate: 99% (positive when you do have the disease).",
+        "True-negative rate: 99% (negative when you do not have it).",
+        "You tested positive, with no other information about you."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "Given a positive result, what is the chance you actually have the disease?",
+        "options": [
+          "About 99%",
+          "About 50%",
+          "About 9%",
+          "About 1%"
+        ],
+        "correctIndex": 2
+      },
+      "hints": [
+        "In a large group of, say, 100,000 similar people, how many truly have the disease and how many do not?",
+        "How many true positives versus false positives would the test produce across that whole group?",
+        "Among everyone who tests positive, what fraction are the people who truly have the disease?"
+      ],
+      "whyExplanation": "Picture 100,000 people. About 100 have the disease, and of them 99 test positive (true positives). The other 99,900 are healthy, but 1% of them — about 999 — test positive anyway (false positives). A positive result puts you among 99 + 999 ≈ 1098 positives, of whom only 99 truly have the disease: 99/1098 ≈ 9%. The rare base rate means most positives are false alarms — exactly Bayes' theorem: (0.99 × 0.001) / (0.99 × 0.001 + 0.01 × 0.999) ≈ 0.09.",
+      "comingSoon": false
+    },
+    {
+      "id": "boat-and-rock",
+      "title": "The Boat and the Rock",
+      "tagline": "Drop the rock overboard — does the pool rise, fall, or hold?",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "You are sitting in a small rowboat, floating in a swimming pool. In your lap is a heavy rock — so dense it sinks like a stone. You lift the rock and drop it over the side. It plunges straight to the bottom of the pool and settles there, while the boat, now lighter, rides a little higher. What happens to the pool’s water level?",
+      "rules": [
+        "The boat stays afloat the whole time.",
+        "The rock is denser than water and sinks completely to the bottom.",
+        "No water splashes out of the pool."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "What happens to the pool's water level?",
+        "options": [
+          "It rises",
+          "It falls",
+          "It stays the same"
+        ],
+        "correctIndex": 1
+      },
+      "hints": [
+        "While the rock rides in the boat, how much water does its weight push aside?",
+        "Once the rock is on the bottom, is it the rock’s weight or its volume that sets how much water it displaces?",
+        "For a rock denser than water, which is bigger — a volume of water that weighs as much as the rock, or the rock itself?"
+      ],
+      "whyExplanation": "The level falls. While the rock rides in the boat, the boat floats a little lower and displaces an extra volume of water whose WEIGHT equals the rock’s weight. Once the rock sinks, it displaces only its own VOLUME of water. Because the rock is denser than water, a volume of water heavy enough to match the rock is LARGER than the rock itself — so tossing it overboard removes more displacement than it adds, and the water level drops.",
+      "comingSoon": false
+    },
+    {
+      "id": "helium-balloon-car",
+      "title": "The Balloon in the Car",
+      "tagline": "The car lurches forward. Everything leans back — except one thing.",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "A helium balloon on a light string is tied to the floor of a car, so it floats upright, straining toward the roof. Every window is shut, so the air inside is sealed in with the balloon. The car waits at a red light; the light turns green and the car accelerates smoothly forward. You — and everything loose — feel pressed back into your seat. Which way does the balloon lean as the car speeds up?",
+      "rules": [
+        "The car accelerates forward in a straight line.",
+        "The windows are closed, so the cabin air moves with the car.",
+        "The string keeps the balloon from touching the roof."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "Which way does the balloon lean?",
+        "options": [
+          "Backward",
+          "Forward",
+          "It stays upright"
+        ],
+        "correctIndex": 1
+      },
+      "hints": [
+        "When the car accelerates, which way does the surrounding air tend to get thrown?",
+        "If the denser air piles up toward the back, where is the air pressure now higher?",
+        "A helium balloon is always pushed toward LOWER pressure — where has that ended up?"
+      ],
+      "whyExplanation": "It leans forward — the opposite of everything else. When the car accelerates, the ordinary air in the cabin, which is far denser than the helium, gets thrown toward the back, just as you are. That raises the air pressure at the rear and lowers it at the front. A balloon is pushed by the surrounding air from high pressure toward low pressure — that is exactly what buoyancy is, the same effect that makes it rise against gravity. So it tilts FORWARD, into the low-pressure region, leaning the same way the car accelerates.",
+      "comingSoon": false
+    },
+    {
+      "id": "falling-slinky",
+      "title": "The Falling Slinky",
+      "tagline": "Let go of the top. What does the bottom do first?",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "You hold a Slinky by its top coil and let it dangle. Under its own weight it stretches into a long spring and hangs perfectly still. Then you open your fingers and let it drop. In the very first instant after you release the top — before the spring has had any time to collapse — what does the BOTTOM of the Slinky do?",
+      "rules": [
+        "The Slinky hangs fully stretched and motionless before release.",
+        "Only the top coil is let go; nothing touches the bottom.",
+        "Consider only the first instant after release."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "The instant after release, what does the BOTTOM of the slinky do?",
+        "options": [
+          "Falls immediately",
+          "Rises",
+          "Stays still for a moment"
+        ],
+        "correctIndex": 2
+      },
+      "hints": [
+        "Before release, what forces act on the bottom coil, and why does it hang motionless?",
+        "Does letting go of the top instantly change the stretch — and therefore the tension — down near the bottom?",
+        "How fast can the \"news\" that the top was released actually travel down the spring?"
+      ],
+      "whyExplanation": "The bottom stays still for a moment. While the Slinky hangs stretched, the bottom coil is held up by the spring tension pulling it upward, which exactly cancels gravity pulling it down — that balance is why it hangs motionless. Letting go removes your hand’s force at the TOP, but it does not instantly change the stretch, and so the tension, near the bottom. That upward pull still balances gravity there until the collapsing top physically arrives. The information that \"the top was released\" can travel down no faster than the spring can collapse — so the bottom simply hovers in place until the falling top catches up to it, then they drop together.",
+      "comingSoon": false
+    },
+    {
+      "id": "bicycle-pedal",
+      "title": "The Backward Pedal",
+      "tagline": "Pull the low pedal backward. Which way does the bike roll?",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "A bicycle stands upright on level ground while a friend holds it steady so it cannot tip over. One pedal is at its lowest point, hanging straight down. You crouch beside the bike, take hold of that low pedal, and gently pull it horizontally backward — toward the rear wheel. The bike is free to roll. Which way does it roll?",
+      "rules": [
+        "The bike is held upright but free to roll forward or backward.",
+        "You pull the lowest pedal horizontally toward the back of the bike.",
+        "The chain and gears are engaged as normal."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "When the lower pedal is pulled straight back, the bicycle…",
+        "options": [
+          "Rolls forward",
+          "Rolls backward",
+          "Stays put"
+        ],
+        "correctIndex": 1
+      },
+      "hints": [
+        "When you ride this bike forward, which way is the bottom pedal moving relative to the frame?",
+        "Are you pulling the pedal backward relative to the frame, or relative to the ground?",
+        "For each full turn of the pedals, how far does the bike travel along the ground compared with how far the pedal swings around its little circle?"
+      ],
+      "whyExplanation": "It rolls backward — toward you, in the direction of your pull. Here is the trap: when you ride forward, the pedal at the bottom of its stroke is sweeping backward relative to the bike frame, so \"pedal going backward\" feels like it should mean \"bike going forward.\" But you are pulling the pedal backward relative to the GROUND, not the frame. Because the wheels are geared, one turn of the cranks rolls the whole bike a long way — the bottom bracket travels far more than the pedal swings around its little circle. So as you drag the pedal backward, the entire bike slides backward faster than the crank can wind forward, and the bike rolls backward with your hand.",
+      "comingSoon": false
+    },
+    {
+      "id": "mpemba",
+      "title": "The Mpemba Effect",
+      "tagline": "Could a hot cup beat a cold one to ice?",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "Two identical open containers go into the same freezer at the same moment. One holds water that starts out hot, near boiling; the other holds the same amount of water starting out cold, near room temperature. Common sense says the cold water has a head start and must reach the frozen state first. But careful experiments — noted since antiquity and studied in modern labs — tell a stranger story. Can hot water sometimes freeze faster than cold water?",
+      "rules": [
+        "Same freezer, same containers, same amount of water.",
+        "The only difference is the starting temperature.",
+        "\"Freeze faster\" means reaching a solid frozen state in less time."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "binary",
+        "question": "Can hot water sometimes freeze faster than cold water?",
+        "optionA": "Yes",
+        "optionB": "No",
+        "correctIsA": true
+      },
+      "hints": [
+        "Does a hotter container lose heat to its surroundings faster or slower than a cooler one?",
+        "Might some of the hot water leave before it ever reaches freezing — so is there really the same amount left to freeze?",
+        "Could effects like evaporation, convection currents, dissolved gases, or supercooling differ between the two containers?"
+      ],
+      "whyExplanation": "Yes — this is the Mpemba effect, named for the Tanzanian schoolboy Erasto Mpemba, who noticed it while making ice cream in 1963. Under the right conditions a hotter sample really can reach the frozen state before a cooler one. There is no single tidy cause; several effects can each tip the balance: hot water evaporates more, so less mass is left to freeze; it stirs up stronger convection currents that shed heat quickly; it drives off dissolved gases; and the two samples can supercool to different degrees before ice forms. It does not happen every time — it depends on the setup — but it happens, which is why \"cold obviously wins\" is the wrong bet.",
+      "comingSoon": false
+    },
+    {
+      "id": "bullet-drop",
+      "title": "The Bullet and the Drop",
+      "tagline": "One bullet flies, one just falls. Who lands first?",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "You stand on a wide, perfectly level field holding two identical bullets at exactly the same height. At one instant you fire the first bullet from a gun held perfectly horizontal — it screams away parallel to the ground — and at that very same instant you simply let the second bullet drop from your other hand. Ignore air resistance and the curve of the Earth. Which bullet reaches the ground first?",
+      "rules": [
+        "Both bullets start at the same height at the same instant.",
+        "The fired bullet leaves the barrel perfectly horizontally over level ground.",
+        "Ignore air resistance and the Earth’s curvature."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "Which reaches the ground first?",
+        "options": [
+          "The dropped bullet",
+          "The fired bullet",
+          "They land at the same time"
+        ],
+        "correctIndex": 2
+      },
+      "hints": [
+        "Can you treat a bullet’s horizontal motion and its vertical motion completely separately?",
+        "Does travelling sideways give the fired bullet any upward push to slow its fall?",
+        "What is the vertical starting speed of each bullet at the moment of release?"
+      ],
+      "whyExplanation": "They land at the same time. Horizontal and vertical motion are independent: gravity pulls both bullets downward with the same acceleration, and neither one starts with any up-or-down speed. The fired bullet’s enormous forward speed carries it far downrange, but sideways motion does nothing to hold it up — it cannot fight gravity. Both bullets begin falling from the same height with zero vertical velocity, so both take exactly the same time to hit the ground. The fired one just lands far, far away.",
+      "comingSoon": false
+    },
+    {
+      "id": "ice-in-glass",
+      "title": "The Melting Ice",
+      "tagline": "A brim-full glass, a melting cube. Will it spill?",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "A glass is filled to the very brim with water — one more drop would spill — and a single ice cube floats in it, bobbing partly above the surface. You leave the glass on the table and watch the ice slowly melt away completely. As the floating ice turns to water, what happens to the level in the glass?",
+      "rules": [
+        "The glass starts filled exactly to the brim, with the ice already floating.",
+        "The ice melts completely.",
+        "Ignore evaporation and temperature-driven changes in the water’s volume."
+      ],
+      "sandbox": {
+        "type": "reasoning"
+      },
+      "answer": {
+        "type": "multipleChoice",
+        "question": "As the floating ice melts, the water level…",
+        "options": [
+          "Overflows",
+          "Drops",
+          "Stays the same"
+        ],
+        "correctIndex": 2
+      },
+      "hints": [
+        "A floating object pushes aside a WEIGHT of water equal to its own weight — how does that compare to the water the ice will become?",
+        "When the ice melts, does its meltwater weigh any more or less than the ice did?",
+        "Does the part of the cube poking up above the surface add any water that was not already accounted for?"
+      ],
+      "whyExplanation": "The level stays the same — not a drop overflows. A floating ice cube pushes aside a volume of water whose weight exactly equals the cube’s own weight. When it melts, the cube becomes water of that very same weight — and that weight of water takes up precisely the volume the submerged part of the cube was already displacing. So the meltwater slots perfectly into the \"hole\" the ice was making. The bit poking up above the surface is just the extra room ice takes up by being less dense than water; it adds no new volume below the line. This is also why melting sea ice does not, on its own, raise sea level — unlike ice that sits on land.",
+      "comingSoon": false
+    },
+    {
+      "id": "twenty-stone-duel",
+      "title": "The Twenty-Stone Duel",
+      "tagline": "Twenty stones, take 1–3, last one wins. First move — can you win?",
+      "category": "gameTheory",
+      "difficulty": 5,
+      "prompt": "A pile of 20 stones sits between you and a flawless opponent. You take turns; on each turn a player removes 1, 2, or 3 stones. Whoever picks up the very last stone wins the duel. You get to move first, and your opponent never makes a mistake. Going first, can you always force a win?",
+      "rules": [
+        "The pile starts with exactly 20 stones.",
+        "On your turn you must remove 1, 2, or 3 stones.",
+        "Whoever takes the last stone wins.",
+        "You move first; your opponent plays perfectly."
       ],
       "sandbox": {
         "type": "nim",
-        "stones": 13,
+        "stones": 20,
         "maxTake": 3,
         "lastTakeWins": true
       },
@@ -249,45 +1453,81 @@
         "question": "Going first, can you always force a win?",
         "optionA": "Yes",
         "optionB": "No",
-        "correctIsA": true
+        "correctIsA": false
       },
       "hints": [
-        "After both of you move once, how many stones can disappear in a full round?",
-        "Is there a \"safe\" number of stones you always want to hand back to your opponent?"
+        "After you move and your opponent replies, how much can you guarantee the pile has shrunk — and who controls that total?",
+        "Is there a \"safe\" number of stones you would love to hand your opponent at the end of every round?",
+        "What is special about 20 when the most you can ever remove in a turn is 3?"
       ],
-      "whyExplanation": "The magic number is 4 (one more than the most you can take). If you always leave a multiple of 4 stones for your opponent — 12, then 8, then 4 — they can never escape it: whatever they take (1–3), you take the rest of that round back to the next multiple of 4. From 13 you take 1 to leave 12, and you win every time. So yes, the first player can always force a win here.",
+      "whyExplanation": "No — with 20 stones you cannot force a win, because 20 is a multiple of 4. Whatever you take (1, 2, or 3), your opponent can always remove enough to make your two moves add up to exactly 4. So a perfect opponent keeps handing the pile back to you at the next lower multiple of 4: 20 → 16 → 12 → 8 → 4 → 0. Eventually you face 4 stones; whatever you take leaves 1, 2, or 3, and your opponent scoops up the last one. The player who can leave a multiple of 4 owns the game — and from 20, moving first, that player is your opponent, not you. (You would want to move first only when the pile is NOT a multiple of 4.)",
       "comingSoon": false
     },
     {
-      "id": "last-stone-reversed",
-      "title": "The Last Stone: Reversed",
-      "tagline": "Same game, flipped rule — now taking the last stone LOSES.",
-      "category": "gameTheory",
-      "difficulty": 4,
-      "prompt": "There are 10 stones. You and your opponent take turns removing 1, 2, or 3 stones. You go first. This time, whoever takes the very last stone LOSES.\n\nPlaying perfectly against a perfect opponent, can the first player always force a win?",
+      "id": "balance-beam",
+      "title": "The Stubborn Beam",
+      "tagline": "A heavy block will not move. Balance it with a lighter one.",
+      "category": "physics",
+      "difficulty": 5,
+      "prompt": "A seesaw-style beam rests on a central pivot. A heavy block weighing 7 units is fixed to the left arm, 4 units of distance from the pivot — and it will not budge. On the right arm you have a lighter block weighing only 4 units, and you can slide it in and out along the beam, anywhere from 0 to 8 units from the pivot. Slide the right-hand block to the one spot that makes the beam hang perfectly level.",
       "rules": [
-        "On your turn, remove 1, 2, or 3 stones.",
-        "You move first; the opponent then plays perfectly.",
-        "Whoever is forced to take the last stone loses."
+        "The left block weighs 7 units and is fixed 4 units from the pivot.",
+        "The right block weighs 4 units and slides between 0 and 8 units from the pivot.",
+        "Only the right block can move; place it so the beam balances."
       ],
       "sandbox": {
-        "type": "nim",
-        "stones": 10,
-        "maxTake": 3,
-        "lastTakeWins": false
+        "type": "lever",
+        "leftWeight": 7.0,
+        "leftDistance": 4.0,
+        "rightWeight": 4.0,
+        "maxDistance": 8.0
       },
       "answer": {
-        "type": "binary",
-        "question": "Going first, can you always force a win?",
-        "optionA": "Yes",
-        "optionB": "No",
-        "correctIsA": true
+        "type": "goal",
+        "goalLabel": "Balance the beam"
       },
       "hints": [
-        "What is the WORST pile size to be handed now — the one you are desperate to avoid?",
-        "You wanted multiples of 4 before. Where does that safe target shift when the last stone is poison?"
+        "What is the left block’s turning effect on the beam — does it depend on its weight alone, or on weight AND distance?",
+        "Since the right block is lighter than the left, should it sit closer to the pivot or farther out to match it?",
+        "What distance, multiplied by the right block’s weight of 4, equals the left block’s turning effect?"
       ],
-      "whyExplanation": "Now the poison is the last stone, so you want to hand your opponent exactly 1 (they must take it and lose). Working back, the safe numbers to leave are 1, 5, 9, 13, … — one more than a multiple of 4. From 10 you take 1 to leave 9, then keep returning to 5 and then 1. So yes, the first player can still force a win — the target just shifts by one.",
+      "whyExplanation": "A beam balances when the two sides have equal \"turning effect\" (torque) about the pivot — and turning effect is weight multiplied by distance from the pivot, not weight on its own. The left block gives 7 × 4 = 28. To match that with the lighter 4-unit block, you need 4 × distance = 28, so the distance must be 7 units. The lighter block simply sits farther out to make up for weighing less — that is the whole secret of the lever, and why a small child can balance an adult on a seesaw by sitting right at the end.",
+      "comingSoon": false
+    },
+    {
+      "id": "exact-total",
+      "title": "The Exact Total",
+      "tagline": "Six odd tiles. Hit 53 on the nose.",
+      "category": "math",
+      "difficulty": 5,
+      "prompt": "You are given six numbered tiles: 7, 11, 13, 17, 19, and 23. Pick some of them — any combination you like — so that the numbers on your chosen tiles add up to exactly 53. Each tile you use counts once; leave out the ones you do not want. Build a selection that totals precisely 53.",
+      "rules": [
+        "The tiles available are 7, 11, 13, 17, 19, and 23.",
+        "Each tile may be used at most once.",
+        "Use as few or as many tiles as you like — the chosen tiles must sum to exactly 53."
+      ],
+      "sandbox": {
+        "type": "numberTiles",
+        "tiles": [
+          7,
+          11,
+          13,
+          17,
+          19,
+          23
+        ],
+        "target": 53
+      },
+      "answer": {
+        "type": "reachTarget",
+        "target": 53
+      },
+      "hints": [
+        "53 is odd, and every tile is odd — how many odd numbers must you combine to reach an odd total?",
+        "Which single tile, subtracted from 53, leaves an amount you can build from the tiles that remain?",
+        "If you start with the largest tile, 23, how much more do you still need, and can the smaller tiles reach it?"
+      ],
+      "whyExplanation": "There is more than one way to land on 53 exactly. For example, 13 + 17 + 23 = 53, and so does 11 + 19 + 23 = 53. A useful shortcut: since 53 is odd and every tile here is odd, you must use an ODD number of tiles — one, three, or five — because any even count of odd numbers always sums to an even total. No single tile equals 53, so the shortest routes use three tiles, as above. The quiet pleasure of this small subset-sum puzzle is that the \"odd total\" constraint secretly tells you how many pieces to look for.",
       "comingSoon": false
     }
   ]

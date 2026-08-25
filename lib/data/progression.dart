@@ -41,25 +41,31 @@ List<Puzzle> orderPuzzles(List<Puzzle> puzzles) {
   return [for (final e in indexed) e.$2];
 }
 
+/// How many levels beyond your solved count stay open at once. With a window,
+/// a single brutal puzzle can never wall you — you can skip ahead and come back.
+const int kUnlockAhead = 3;
+
 /// Builds the level ladder from [puzzles] and the player's [solvedIds].
 ///
-/// Unlock rule (deliberately robust to pack changes / refetches):
-///   - the first level is always unlocked;
-///   - a level is unlocked once the PREVIOUS one is solved;
+/// LENIENT unlock rule (deliberately robust to pack changes / refetches):
+///   - a rolling window is always open: level `i` is unlocked when
+///     `i <= solvedCount + kUnlockAhead` (so ~[kUnlockAhead]+1 are playable and
+///     you may SKIP a fiendish one and try the next);
 ///   - a level that is ALREADY solved stays unlocked no matter what.
-/// Because it keys off stable puzzle ids, solving state is never lost when the
-/// remote pack reorders or adds puzzles.
+/// Because it keys off stable puzzle ids (not fixed positions), solving state is
+/// never lost when the remote pack reorders or adds puzzles.
 List<PuzzleLevel> buildLevels(List<Puzzle> puzzles, Set<String> solvedIds) {
   final ordered = orderPuzzles(puzzles);
+  final solvedCount =
+      ordered.where((p) => solvedIds.contains(p.id)).length;
   final levels = <PuzzleLevel>[];
   for (var i = 0; i < ordered.length; i++) {
     final solved = solvedIds.contains(ordered[i].id);
-    final prevSolved = i == 0 || solvedIds.contains(ordered[i - 1].id);
     levels.add(PuzzleLevel(
       puzzle: ordered[i],
       index: i,
       solved: solved,
-      unlocked: solved || prevSolved,
+      unlocked: solved || i <= solvedCount + kUnlockAhead,
     ));
   }
   return levels;

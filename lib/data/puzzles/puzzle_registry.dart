@@ -1,21 +1,16 @@
 import '../models/puzzle.dart';
-import 'make_the_target_puzzle.dart';
-import 'more_puzzles.dart';
-import 'nim_puzzle.dart';
-import 'tigers_puzzle.dart';
-import 'will_it_balance_puzzle.dart';
+import 'puzzles_logic.dart';
+import 'puzzles_math.dart';
+import 'puzzles_number.dart';
+import 'puzzles_physics.dart';
+import 'puzzles_probability.dart';
 
-/// The single source of truth for the app's built-in puzzles. Order here is the
-/// canonical level ladder (easy → hard); the remote pack can extend it. Adding a
-/// puzzle = adding a [Puzzle] entry (composing existing sandbox mechanics).
+/// The app's 50 built-in puzzles, in level order (all difficulty 5). Assembled
+/// from the five themed sets. Adding puzzles = extend a set (or the remote pack).
 final List<Puzzle> puzzleRegistry = <Puzzle>[
-  makeTheTargetPuzzle, // 1 · math · d1
-  willItBalancePuzzle, // 2 · physics · d2
-  tigersPuzzle, // 3 · game theory (flagship) · d3
-  makeTheTargetTwo, // 4 · math · d3
-  willItBalanceTwo, // 5 · physics · d4
-  tigersNinetyNine, // 6 · game theory · d4
-  makeTheTargetThree, // 7 · math · d5
-  lastStonePuzzle, // 8 · game theory (Nim) · d5
-  lastStoneReversedPuzzle, // 9 · game theory (Nim misère) · d4
+  ...logicPuzzles, // 1–10  · logic / epistemic / game theory
+  ...mathPuzzles, // 11–20 · optimization / combinatorics
+  ...numberPuzzles, // 21–30 · number theory / counting
+  ...probabilityPuzzles, // 31–40 · probability
+  ...physicsPuzzles, // 41–50 · counterintuitive physics + tactile
 ];

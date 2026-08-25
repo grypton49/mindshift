@@ -10,26 +10,45 @@ Puzzle _p(String id, int difficulty, {bool comingSoon = false}) => Puzzle(
       category: PuzzleCategory.math,
       difficulty: difficulty,
       prompt: '',
-      sandbox: const NumberTilesSandboxSpec(tiles: [1, 2], target: 3),
-      answer: const ReachTargetAnswerSpec(target: 3),
+      sandbox: const ReasoningSandboxSpec(),
+      answer: const NumberEntryAnswerSpec(answer: 1),
       comingSoon: comingSoon,
     );
 
+List<Puzzle> _ladder(int n) =>
+    [for (var i = 0; i < n; i++) _p('p$i', 5)];
+
 void main() {
-  test('only the first level is unlocked with no progress', () {
-    final levels = buildLevels([_p('a', 1), _p('b', 2), _p('c', 3)], {});
-    expect(levels.map((l) => l.unlocked), [true, false, false]);
+  test('a rolling window is open from the start (lenient unlock)', () {
+    final levels = buildLevels(_ladder(10), {});
+    for (var i = 0; i < levels.length; i++) {
+      expect(levels[i].unlocked, i <= kUnlockAhead,
+          reason: 'level $i unlocked?');
+    }
     expect(currentLevelNumber(levels), 1);
   });
 
-  test('solving a level unlocks the next; solved levels stay unlocked', () {
-    final levels = buildLevels([_p('a', 1), _p('b', 2), _p('c', 3)], {'a'});
+  test('solving advances the window; solved levels stay unlocked', () {
+    final levels = buildLevels(_ladder(10), {'p0'});
     expect(levels[0].solved, isTrue);
-    expect(levels.map((l) => l.unlocked), [true, true, false]);
+    // solvedCount = 1 → indices 0..(1+kUnlockAhead) unlocked.
+    for (var i = 0; i < levels.length; i++) {
+      expect(levels[i].unlocked, i <= 1 + kUnlockAhead);
+    }
     expect(currentLevelNumber(levels), 2);
   });
 
-  test('levels are ordered by difficulty regardless of input order', () {
+  test('a fiendish level can be SKIPPED (unlock is not consecutive)', () {
+    // Solve p2 without solving p0/p1: the window still advances by count.
+    final levels = buildLevels(_ladder(10), {'p2'});
+    expect(levels[2].solved, isTrue);
+    expect(levels[2].unlocked, isTrue);
+    // Unsolved neighbours inside the window remain playable.
+    expect(levels[0].unlocked, isTrue);
+    expect(levels[1].unlocked, isTrue);
+  });
+
+  test('levels are ordered by difficulty then input order', () {
     final levels = buildLevels([_p('hard', 5), _p('easy', 1), _p('mid', 3)], {});
     expect(levels.map((l) => l.puzzle.id), ['easy', 'mid', 'hard']);
   });
@@ -43,24 +62,15 @@ void main() {
   group('DATA SAFETY: a pack refetch never loses progress', () {
     test('solved puzzles stay solved & unlocked when new puzzles are added', () {
       final solved = {'a', 'b'};
-
-      // Simulate a refetch that adds two harder puzzles + reorders.
+      // A refetch that adds harder puzzles + reorders.
       final after = [_p('d', 4), _p('a', 1), _p('c', 3), _p('b', 2)];
       final levels = buildLevels(after, solved);
-
       final byId = {for (final l in levels) l.puzzle.id: l};
-      // Previously solved levels remain solved AND unlocked.
       expect(byId['a']!.solved, isTrue);
       expect(byId['a']!.unlocked, isTrue);
       expect(byId['b']!.solved, isTrue);
       expect(byId['b']!.unlocked, isTrue);
-      // A brand-new level after a solved one is unlocked (its predecessor 'b'
-      // is solved), while the hardest new one waits its turn.
-      expect(byId['c']!.unlocked, isTrue); // ordered right after 'b'
-      // Nothing about adding content erased the two original solves.
       expect(levels.where((l) => l.solved).length, 2);
-
-      // Order is still purely by difficulty (a<b<c<d).
       expect(levels.map((l) => l.puzzle.id), ['a', 'b', 'c', 'd']);
     });
   });
