@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7BA492"/>
+      <stop offset="1" stop-color="#48685A"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1024" height="1024" rx="232" ry="232" fill="url(#bg)"/>
+  <!-- balanced centered ring (the "mind"/lens) -->
+  <circle cx="512" cy="512" r="242" fill="none" stroke="#F5F2EB" stroke-width="80"/>
+  <!-- small center node -->
+  <circle cx="512" cy="512" r="46" fill="#F5F2EB"/>
+  <!-- gold 4-point spark of insight, sitting on the ring at the upper-right -->
+  <path d="M 689 329 L 719 412 L 802 442 L 719 472 L 689 555 L 659 472 L 576 442 L 659 412 Z"
+        fill="#ECB25E" stroke="#48685A" stroke-width="10" stroke-linejoin="round"/>
+</svg>
